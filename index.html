@@ -18,37 +18,16 @@
 
 <div class="preloader" id="preloader">
   <div class="preloader-inner">
-    <svg id="drawDress" class="draw-dress" viewBox="0 0 300 375" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Une robe se dessine">
-      <ellipse class="draw-path" cx="150" cy="46" rx="17" ry="20"/>
-      <path class="draw-path" d="M133 64 C 122 72, 118 84, 120 96"/>
-      <path class="draw-path" d="M167 64 C 178 72, 182 84, 180 96"/>
-      <path class="draw-path" d="M120 96 C 116 130, 122 150, 132 162"/>
-      <path class="draw-path" d="M180 96 C 184 130, 178 150, 168 162"/>
-      <path class="draw-path" d="M132 162 C 110 220, 96 280, 90 340"/>
-      <path class="draw-path" d="M168 162 C 190 220, 204 280, 210 340"/>
-      <path class="draw-path" d="M90 340 C 130 352, 170 352, 210 340"/>
-      <path class="draw-path thin" d="M120 130 C 145 138, 155 138, 180 130"/>
-      <path class="draw-path thin" d="M110 200 C 150 212, 150 212, 190 200"/>
-      <path class="draw-path thin" d="M100 270 C 150 285, 150 285, 200 270"/>
-      <circle id="drawTip" class="draw-tip" cx="150" cy="46" r="3.5"/>
-    </svg>
     <span class="preloader-name">Léane Soubrier</span>
-    <span class="preloader-tag">MODE — BIJOUX — DIRECTION ARTISTIQUE</span>
   </div>
 </div>
 
 <div class="progress-bar" id="progressBar"></div>
 
 <header class="site-header" id="siteHeader">
-  <a href="#top" class="logo">L.S</a>
-  <nav class="main-nav">
-    <a href="#apropos" data-nav>À propos</a>
-    <a href="#valeurs" data-nav>Mes valeurs</a>
-    <a href="#services" data-nav>Mes services</a>
-    <a href="#creations" data-nav>Mes créations</a>
-    <a href="#contact" data-nav class="nav-cta">Contact</a>
-  </nav>
   <button class="burger" id="burger" aria-label="menu"><span></span><span></span></button>
+  <a href="#top" class="logo">Léane Soubrier</a>
+  <a href="#contact" class="header-contact" data-nav>Contact</a>
 </header>
 
 <div class="mobile-nav" id="mobileNav">
@@ -71,39 +50,25 @@
 <main id="top">
 
   <section class="hero" id="hero">
-    <div class="hero-marquee" aria-hidden="true">
-      <div class="marquee-track">
-        <span>MODE&nbsp;&nbsp;•&nbsp;&nbsp;BIJOUX&nbsp;&nbsp;•&nbsp;&nbsp;DIRECTION ARTISTIQUE&nbsp;&nbsp;•&nbsp;&nbsp;STYLISME&nbsp;&nbsp;•&nbsp;&nbsp;BRANDING&nbsp;&nbsp;•&nbsp;&nbsp;</span>
-        <span>MODE&nbsp;&nbsp;•&nbsp;&nbsp;BIJOUX&nbsp;&nbsp;•&nbsp;&nbsp;DIRECTION ARTISTIQUE&nbsp;&nbsp;•&nbsp;&nbsp;STYLISME&nbsp;&nbsp;•&nbsp;&nbsp;BRANDING&nbsp;&nbsp;•&nbsp;&nbsp;</span>
+    <div class="hero-media" id="heroMedia">
+      <img class="active" src="assets/web/portrait.jpg" alt="Léane Soubrier" loading="eager">
+      <img src="assets/web/ethiquette-3.jpg" alt="The Ethiquette — campagne" loading="lazy">
+      <img src="assets/web/shooting-4.jpg" alt="Shooting IA" loading="lazy">
+    </div>
+    <div class="hero-overlay">
+      <h1 class="hero-name">
+        <span class="line" data-split>Léane</span>
+        <span class="line" data-split>Soubrier</span>
+      </h1>
+      <p class="hero-role" data-reveal>Styliste&nbsp;/&nbsp;DA&nbsp;Freelance</p>
+      <div class="hero-cta" data-reveal>
+        <a href="#creations" class="btn btn-fill" data-magnetic>Voir mes créations</a>
+        <a href="#contact" class="btn btn-line-inverted" data-magnetic>Me contacter</a>
       </div>
     </div>
 
-    <p class="hero-eyebrow" data-reveal>Portfolio freelance</p>
-    <h1 class="hero-name">
-      <span class="line" data-split>Léane</span>
-      <span class="line" data-split>Soubrier</span>
-    </h1>
-    <p class="hero-role" data-reveal>Styliste&nbsp;/&nbsp;DA&nbsp;Freelance</p>
-    <p class="hero-tags" data-reveal><span>Mode</span><em>•</em><span>Bijoux</span></p>
-
-    <div class="hero-cta" data-reveal>
-      <a href="#creations" class="btn btn-fill" data-magnetic>Voir mes créations</a>
-      <a href="#contact" class="btn btn-line" data-magnetic>Me contacter</a>
-    </div>
-
     <div class="hero-scroll">
-      <span>Scroll</span>
       <div class="scroll-line"><i></i></div>
-    </div>
-
-    <div class="rotating-badge" id="rotBadge" aria-hidden="true">
-      <svg viewBox="0 0 200 200">
-        <defs>
-          <path id="badgeCircle" d="M100,100 m-80,0 a80,80 0 1,1 160,0 a80,80 0 1,1 -160,0"></path>
-        </defs>
-        <text><textPath href="#badgeCircle" startOffset="0">STYLISTE • DIRECTION ARTISTIQUE • LÉANE SOUBRIER • </textPath></text>
-      </svg>
-      <span class="badge-dot"></span>
     </div>
   </section>
 
@@ -120,9 +85,8 @@
         <span class="apropos-caption">Léane Soubrier — Paris</span>
       </div>
       <div class="apropos-text">
-        <p data-reveal>Passionnée par la mode, l'image et les tendances contemporaines, je conçois des identités visuelles fortes et cohérentes en accord avec l'ADN, les valeurs et les ambitions de chaque marque. Mon travail consiste à construire des univers singuliers, capables de raconter une histoire et de créer une véritable connexion avec leur clientèle.</p>
-        <p data-reveal>J'interviens sur l'ensemble du processus créatif&nbsp;: recherche d'inspirations, analyse des tendances, élaboration de concepts, création de moodboards, développement de collections, direction artistique de campagnes et shootings, mais également sur la définition et la structuration de l'identité de marque.</p>
-        <p data-reveal>Grâce à ma double expertise en création et en développement produit, je suis en mesure d'accompagner les marques aussi bien sur leur image que sur la cohérence de leur offre, afin de construire des projets à la fois créatifs, désirables et stratégiques.</p>
+        <p data-reveal>Passionnée par la mode et l'image, je conçois des identités visuelles fortes, en accord avec l'ADN et les ambitions de chaque marque — de la recherche d'inspiration jusqu'à la direction artistique de campagnes.</p>
+        <p data-reveal>Ma double expertise en création et en développement produit me permet d'accompagner les marques sur des projets à la fois créatifs, désirables et stratégiques.</p>
       </div>
     </div>
   </section>
@@ -132,7 +96,7 @@
       <span class="section-num">02</span>
       <h2 class="section-title" data-reveal-chars>Mes valeurs</h2>
     </div>
-    <p class="valeurs-intro" data-reveal>J'accompagne les marques dans la création d'univers visuels forts et cohérents, en alliant direction artistique, stylisme et branding. Mon approche repose sur l'écoute, la créativité et l'exigence, afin de développer des identités singulières qui racontent une histoire, suscitent l'émotion et créent une véritable connexion avec leur audience.</p>
+    <p class="valeurs-intro" data-reveal>Des identités singulières qui racontent une histoire et créent une vraie connexion avec leur audience.</p>
 
     <div class="values-line" id="valuesLine">
       <svg viewBox="0 0 1000 4" preserveAspectRatio="none" class="values-svg">

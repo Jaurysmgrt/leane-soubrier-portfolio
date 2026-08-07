@@ -16,15 +16,8 @@ window.addEventListener('load', () => setTimeout(revealEverything, 4500));
 
 try {
 
-/* preloader — a dress draws itself, then reveals the site */
+/* preloader — simple wordmark fade */
 document.body.style.overflow = 'hidden';
-const dressPaths = gsap.utils.toArray('#drawDress .draw-path');
-dressPaths.forEach(p => {
-  const len = p.getTotalLength();
-  p.style.strokeDasharray = len;
-  p.style.strokeDashoffset = len;
-});
-
 const introTl = gsap.timeline({
   onComplete: () => {
     document.body.style.overflow = '';
@@ -32,23 +25,9 @@ const introTl = gsap.timeline({
   }
 });
 introTl
-  .to('#drawTip', { opacity: 1, duration: .25 })
-  .to(dressPaths, { strokeDashoffset: 0, duration: 1.2, ease: 'power2.inOut', stagger: .05 }, 0)
-  .to('#drawTip', {
-    duration: 1.2, ease: 'power1.inOut',
-    keyframes: {
-      '0%': { attr: { cx: 150, cy: 46 } },
-      '25%': { attr: { cx: 120, cy: 96 } },
-      '50%': { attr: { cx: 132, cy: 162 } },
-      '75%': { attr: { cx: 90, cy: 340 } },
-      '100%': { attr: { cx: 150, cy: 358 } }
-    }
-  }, 0)
-  .to('#drawTip', { opacity: 0, duration: .25 }, '-=.25')
-  .to('.preloader-name', { opacity: 1, duration: .5, ease: 'power2.out' }, '-=.4')
-  .to('.preloader-tag', { opacity: 1, duration: .5 }, '-=.3')
-  .to('.preloader-inner', { opacity: 0, scale: .97, duration: .45, ease: 'power2.in' }, '+=.35')
-  .to('#preloader', { autoAlpha: 0, duration: .4 }, '-=.2');
+  .to('.preloader-name', { opacity: 1, duration: .6, ease: 'power2.out' })
+  .to('.preloader-inner', { opacity: 0, scale: .98, duration: .4, ease: 'power2.in' }, '+=.5')
+  .to('#preloader', { autoAlpha: 0, duration: .35 }, '-=.15');
 
 } catch (e) { revealEverything(); }
 
@@ -98,6 +77,19 @@ try {
   }, { passive: true });
 } catch (e) {}
 
+/* hero slideshow */
+try {
+  const heroImgs = document.querySelectorAll('#heroMedia img');
+  if (heroImgs.length > 1) {
+    let heroIdx = 0;
+    setInterval(() => {
+      heroImgs[heroIdx].classList.remove('active');
+      heroIdx = (heroIdx + 1) % heroImgs.length;
+      heroImgs[heroIdx].classList.add('active');
+    }, 4500);
+  }
+} catch (e) {}
+
 /* mobile nav */
 try {
   const burger = document.getElementById('burger');
@@ -142,14 +134,14 @@ try {
   gsap.set('.hero-name .line span', { yPercent: 120, opacity: 0 });
   gsap.to('.hero-name .line span', {
     yPercent: 0, opacity: 1, duration: 1, ease: 'power4.out',
-    stagger: .035, delay: 2.2
+    stagger: .035, delay: 1.4
   });
-  gsap.to('.hero-eyebrow, .hero-role, .hero-tags', {
-    opacity: 1, y: 0, duration: 1, ease: 'power3.out', stagger: .15, delay: 2.5
+  gsap.set('.hero-role, .hero-cta', { opacity: 0, y: 16 });
+  gsap.to('.hero-role, .hero-cta', {
+    opacity: 1, y: 0, duration: 1, ease: 'power3.out', stagger: .12, delay: 1.7
   });
-  gsap.set('.hero-scroll, .rotating-badge', { opacity: 0 });
-  gsap.to('.hero-scroll', { opacity: 1, duration: 1, delay: 3.1 });
-  gsap.to('.rotating-badge', { opacity: 1, duration: 1, delay: 3.1 });
+  gsap.set('.hero-scroll', { opacity: 0 });
+  gsap.to('.hero-scroll', { opacity: 1, duration: 1, delay: 2.2 });
 } catch (e) {}
 
 /* generic reveal-up — visible by default, JS only arms the animation */
@@ -348,17 +340,6 @@ try {
     });
     el.addEventListener('mouseleave', () => {
       gsap.to(el, { x: 0, y: 0, duration: .6, ease: 'elastic.out(1,.4)' });
-    });
-  });
-} catch (e) {}
-
-/* stitched thread line under section numbers */
-try {
-  document.querySelectorAll('.section-num').forEach(num => {
-    ScrollTrigger.create({
-      trigger: num, start: 'top 88%',
-      onEnter: () => num.classList.add('stitched'),
-      once: true
     });
   });
 } catch (e) {}
