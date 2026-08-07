@@ -214,30 +214,6 @@ try {
   });
 } catch (e) {}
 
-/* creations follow-cursor image */
-try {
-  const follow = document.getElementById('creationFollow');
-  const followImg = document.getElementById('creationFollowImg');
-  let followX = 0, followY = 0, tX = 0, tY = 0;
-  document.querySelectorAll('.creation-item').forEach(item => {
-    item.addEventListener('mouseenter', () => {
-      followImg.src = item.dataset.creationImage;
-      gsap.to(follow, { opacity: 1, duration: .3 });
-    });
-    item.addEventListener('mouseleave', () => {
-      gsap.to(follow, { opacity: 0, duration: .3 });
-    });
-  });
-  window.addEventListener('mousemove', e => {
-    tX = e.clientX + 30; tY = e.clientY - 140;
-  });
-  (function followLoop(){
-    followX += (tX - followX) * .14;
-    followY += (tY - followY) * .14;
-    follow.style.transform = `translate(${followX}px, ${followY}px)`;
-    requestAnimationFrame(followLoop);
-  })();
-} catch (e) {}
 
 /* palette copy */
 try {
@@ -297,14 +273,24 @@ try {
     currentProject = i;
     const idx = item.querySelector('.creation-index')?.textContent.trim() || '';
     const title = item.querySelector('h3')?.textContent.trim() || '';
-    const desc = item.querySelector('p')?.textContent.trim() || '';
-    const gallery = (item.dataset.gallery || item.dataset.creationImage || '').split(',').filter(Boolean);
+    const desc = item.querySelector('.full-desc')?.textContent.trim() || item.querySelector('p')?.textContent.trim() || '';
+    const imgs = item.querySelectorAll('.creation-thumb img, .extra-gallery img');
     elIndex.textContent = idx;
     elTitle.textContent = title;
     elDesc.textContent = desc;
-    elGallery.innerHTML = gallery.map(src => `<img src="${src}" alt="${title}" loading="lazy">`).join('');
+    elGallery.innerHTML = '';
+    imgs.forEach(img => {
+      const clone = document.createElement('img');
+      clone.src = img.currentSrc || img.src;
+      clone.alt = img.alt || title;
+      if (img.classList.contains('wm-src')) clone.className = 'wm-src';
+      elGallery.appendChild(clone);
+    });
     elCount.textContent = `${i + 1} / ${items.length}`;
     page.scrollTop = 0;
+
+    gsap.fromTo([elIndex, elTitle, elDesc], { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: .6, stagger: .08, ease: 'power3.out' });
+    gsap.fromTo(elGallery.children, { opacity: 0, y: 28 }, { opacity: 1, y: 0, duration: .7, stagger: .07, ease: 'power3.out', delay: .1 });
   }
 
   function openProject(i) {
