@@ -280,6 +280,62 @@ try {
   });
 } catch (e) {}
 
+/* project detail pages */
+try {
+  const items = Array.from(document.querySelectorAll('.creation-item'));
+  const page = document.getElementById('projectPage');
+  const elIndex = document.getElementById('projectIndex');
+  const elTitle = document.getElementById('projectTitle');
+  const elDesc = document.getElementById('projectDesc');
+  const elGallery = document.getElementById('projectGallery');
+  const elCount = document.getElementById('projectCount');
+  let currentProject = 0;
+
+  function renderProject(i) {
+    const item = items[i];
+    if (!item) return;
+    currentProject = i;
+    const idx = item.querySelector('.creation-index')?.textContent.trim() || '';
+    const title = item.querySelector('h3')?.textContent.trim() || '';
+    const desc = item.querySelector('p')?.textContent.trim() || '';
+    const gallery = (item.dataset.gallery || item.dataset.creationImage || '').split(',').filter(Boolean);
+    elIndex.textContent = idx;
+    elTitle.textContent = title;
+    elDesc.textContent = desc;
+    elGallery.innerHTML = gallery.map(src => `<img src="${src}" alt="${title}" loading="lazy">`).join('');
+    elCount.textContent = `${i + 1} / ${items.length}`;
+    page.scrollTop = 0;
+  }
+
+  function openProject(i) {
+    renderProject(i);
+    page.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeProject() {
+    page.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  items.forEach((item, i) => {
+    item.addEventListener('click', (e) => {
+      if (e.target.closest('.swatch')) return;
+      openProject(i);
+    });
+  });
+
+  document.getElementById('projectClose')?.addEventListener('click', closeProject);
+  document.getElementById('projectPrev')?.addEventListener('click', () => renderProject((currentProject - 1 + items.length) % items.length));
+  document.getElementById('projectNext')?.addEventListener('click', () => renderProject((currentProject + 1) % items.length));
+  window.addEventListener('keydown', (e) => {
+    if (!page.classList.contains('open')) return;
+    if (e.key === 'Escape') closeProject();
+    if (e.key === 'ArrowRight') renderProject((currentProject + 1) % items.length);
+    if (e.key === 'ArrowLeft') renderProject((currentProject - 1 + items.length) % items.length);
+  });
+} catch (e) {}
+
 /* floating contact button */
 try {
   const floatContact = document.getElementById('floatContact');

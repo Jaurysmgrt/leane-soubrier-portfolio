@@ -215,7 +215,7 @@
       <button class="filter-btn" data-filter="collab">Collaborations</button>
     </div>
 
-    <div class="creation-item" data-cat="bijoux dessin" data-creation-image="assets/web/bijoux-grid.jpg">
+    <div class="creation-item" data-cat="bijoux dessin" data-creation-image="assets/web/bijoux-grid.jpg" data-gallery="assets/web/bijoux-grid.jpg">
       <div class="creation-index">01</div>
       <div class="creation-content">
         <h3 data-reveal>Dessin accessoires &amp; bijoux</h3>
@@ -226,7 +226,7 @@
       </div>
     </div>
 
-    <div class="creation-item" data-cat="mode" data-creation-image="assets/web/moodboard-3.jpg">
+    <div class="creation-item" data-cat="mode" data-creation-image="assets/web/moodboard-3.jpg" data-gallery="assets/web/moodboard-1.jpg,assets/web/moodboard-2.jpg,assets/web/moodboard-3.jpg">
       <div class="creation-index">02</div>
       <div class="creation-content">
         <h3 data-reveal>Moodboards &amp; gamme couleurs</h3>
@@ -245,7 +245,7 @@
       </div>
     </div>
 
-    <div class="creation-item" data-cat="ia mode" data-creation-image="assets/web/shooting-2.jpg">
+    <div class="creation-item" data-cat="ia mode" data-creation-image="assets/web/shooting-2.jpg" data-gallery="assets/web/shooting-2.jpg,assets/web/shooting-4.jpg,assets/web/shooting-3.jpg,assets/web/shooting-1.jpg,assets/web/shooting-5.jpg">
       <div class="creation-index">03</div>
       <div class="creation-content">
         <h3 data-reveal>Créations shooting IA</h3>
@@ -258,7 +258,7 @@
       </div>
     </div>
 
-    <div class="creation-item" data-cat="mode collab" data-creation-image="assets/web/ethiquette-3.jpg">
+    <div class="creation-item" data-cat="mode collab" data-creation-image="assets/web/ethiquette-3.jpg" data-gallery="assets/web/ethiquette-3.jpg,assets/web/ethiquette-1.jpg,assets/web/ethiquette-2.jpg,assets/web/ethiquette-4.jpg">
       <div class="creation-index">04</div>
       <div class="creation-content">
         <h3 data-reveal>Design produit pour «&nbsp;The Ethiquette&nbsp;»</h3>
@@ -271,7 +271,7 @@
       </div>
     </div>
 
-    <div class="creation-item" data-cat="dessin mode" data-creation-image="assets/web/pyramide.jpg">
+    <div class="creation-item" data-cat="dessin mode" data-creation-image="assets/web/pyramide.jpg" data-gallery="assets/web/croquis-figures-1.jpg,assets/web/croquis-figures-2.jpg,assets/web/pyramide.jpg,assets/web/fiche-technique.jpg">
       <div class="creation-index">05</div>
       <div class="creation-content">
         <h3 data-reveal>Dessins techniques &amp; pyramides de produits</h3>
@@ -287,6 +287,26 @@
       <img id="creationFollowImg" src="" alt="">
     </div>
   </section>
+
+  <div class="project-page" id="projectPage">
+    <div class="project-page-bar">
+      <button class="project-close" id="projectClose" aria-label="Fermer">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 5l14 14M19 5L5 19"/></svg>
+        <span>Retour aux créations</span>
+      </button>
+      <div class="project-page-arrows">
+        <button class="project-arrow" id="projectPrev" aria-label="Projet précédent">←</button>
+        <span id="projectCount"></span>
+        <button class="project-arrow" id="projectNext" aria-label="Projet suivant">→</button>
+      </div>
+    </div>
+    <div class="project-page-inner">
+      <span class="project-index" id="projectIndex"></span>
+      <h2 class="project-title" id="projectTitle"></h2>
+      <p class="project-desc" id="projectDesc"></p>
+      <div class="project-gallery" id="projectGallery"></div>
+    </div>
+  </div>
 
   <section class="section section-contact" id="contact">
     <div class="section-head">
