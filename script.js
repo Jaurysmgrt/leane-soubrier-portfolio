@@ -25,8 +25,9 @@ const introTl = gsap.timeline({
   }
 });
 introTl
-  .to('.preloader-name', { opacity: 1, duration: .6, ease: 'power2.out' })
-  .to('.preloader-inner', { opacity: 0, scale: .98, duration: .4, ease: 'power2.in' }, '+=.5')
+  .to('.preloader-name', { opacity: 1, letterSpacing: '.06em', duration: 1, ease: 'power2.out' })
+  .to('.preloader-line', { width: '64px', duration: .7, ease: 'power3.out' }, '-=.5')
+  .to('.preloader-inner', { opacity: 0, scale: .98, duration: .4, ease: 'power2.in' }, '+=.4')
   .to('#preloader', { autoAlpha: 0, duration: .35 }, '-=.15');
 
 } catch (e) { revealEverything(); }
@@ -169,7 +170,7 @@ try {
   });
 } catch (e) {}
 
-/* apropos parallax */
+/* parallax drift */
 try {
   gsap.to('.portrait-frame img', {
     yPercent: -10, ease: 'none',
