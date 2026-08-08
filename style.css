@@ -70,7 +70,9 @@ p{margin:0;}
   background:var(--paper);padding:7px 0;border-radius:40px;border:1px solid var(--line);
 }
 
-@media (hover:none), (max-width:860px){
+/* matches the JS pointer:fine check exactly — a mouse in a narrow window
+   still gets a visible cursor; only touch/coarse pointers fall back */
+@media (hover:none), (pointer:coarse){
   .cursor-dot,.cursor-ring,.cursor-label{display:none;}
   body{cursor:auto;}
 }
