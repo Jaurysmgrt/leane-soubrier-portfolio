@@ -385,6 +385,54 @@ try {
   });
 } catch (e) {}
 
+/* contact popover — the floating button opens a small card with every
+   contact channel, instead of jumping straight into a mail client */
+try {
+  const floatContact = document.getElementById('floatContact');
+  const pop = document.getElementById('contactPop');
+  const popLinks = pop.querySelectorAll('a');
+
+  function openPop(){
+    pop.classList.add('open');
+    pop.setAttribute('aria-hidden', 'false');
+    floatContact.classList.add('open');
+    floatContact.setAttribute('aria-expanded', 'true');
+    popLinks.forEach(a => a.tabIndex = 0);
+  }
+  function closePop(){
+    pop.classList.remove('open');
+    pop.setAttribute('aria-hidden', 'true');
+    floatContact.classList.remove('open');
+    floatContact.setAttribute('aria-expanded', 'false');
+    popLinks.forEach(a => a.tabIndex = -1);
+  }
+  floatContact.addEventListener('click', () => {
+    pop.classList.contains('open') ? closePop() : openPop();
+  });
+  document.addEventListener('click', e => {
+    if (!pop.classList.contains('open')) return;
+    if (e.target === floatContact || floatContact.contains(e.target)) return;
+    if (!pop.contains(e.target)) closePop();
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && pop.classList.contains('open')) { closePop(); floatContact.focus(); }
+  });
+} catch (e) {}
+
+/* contact section — ambient light that follows the cursor, desktop only */
+if (isFinePointer && !reduceMotion) {
+  try {
+    const contactSection = document.getElementById('contact');
+    contactSection.addEventListener('mousemove', e => {
+      const r = contactSection.getBoundingClientRect();
+      contactSection.style.setProperty('--gx', (e.clientX - r.left) + 'px');
+      contactSection.style.setProperty('--gy', (e.clientY - r.top) + 'px');
+      contactSection.classList.add('glow-on');
+    });
+    contactSection.addEventListener('mouseleave', () => contactSection.classList.remove('glow-on'));
+  } catch (e) {}
+}
+
 /* magnetic buttons */
 try {
   document.querySelectorAll('[data-magnetic]').forEach(el => {

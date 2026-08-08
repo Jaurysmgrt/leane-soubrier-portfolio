@@ -219,13 +219,16 @@ section{padding:0 5vw;}
 }
 .value-card{
   background:var(--paper);padding:40px 28px;font-family:var(--ff-sans);font-weight:500;
-  font-size:clamp(1.2rem,2vw,1.6rem);color:var(--ink);transition:background .35s var(--ease),color .35s var(--ease);
+  font-size:clamp(1.2rem,2vw,1.6rem);color:var(--ink);
+  transition:background .35s var(--ease),color .35s var(--ease),transform .5s var(--ease);
+  transform-style:preserve-3d;will-change:transform;
 }
 .value-card span{
   display:block;font-family:var(--ff-serif);font-style:italic;font-weight:400;color:var(--gold);
-  font-size:.95rem;margin-bottom:22px;
+  font-size:.95rem;margin-bottom:22px;transition:transform .4s var(--ease);
 }
 .value-card:hover{background:var(--ink);color:var(--paper);}
+.value-card:hover span{transform:translateZ(24px);}
 
 .vision-block{margin-top:min(110px,11vh);display:flex;flex-wrap:wrap;align-items:center;gap:22px;}
 .vision-label{
@@ -360,7 +363,16 @@ section{padding:0 5vw;}
 }
 
 /* contact */
-.section-contact{background:var(--ink);color:var(--paper);border-top:1px solid var(--gold);}
+.section-contact{background:var(--ink);color:var(--paper);border-top:1px solid var(--gold);position:relative;overflow:hidden;}
+.section-contact::before{
+  content:'';position:absolute;z-index:0;pointer-events:none;
+  width:520px;height:520px;left:var(--gx,50%);top:var(--gy,50%);
+  transform:translate(-50%,-50%);border-radius:50%;
+  background:radial-gradient(circle,rgba(184,147,90,.14),transparent 68%);
+  opacity:0;transition:opacity .5s ease;
+}
+.section-contact.glow-on::before{opacity:1;}
+.contact-grid{position:relative;z-index:1;}
 .contact-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:min(8vw,100px);align-items:end;}
 .contact-statement .section-num{
   font-family:var(--ff-sans);font-style:normal;color:var(--gold);font-size:.78rem;
@@ -421,10 +433,35 @@ section{padding:0 5vw;}
   padding:14px 22px;border-radius:60px;font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;
   box-shadow:0 10px 30px rgba(0,0,0,.25);opacity:0;transform:translateY(20px);
   transition:opacity .5s var(--ease),transform .5s var(--ease),background .3s;
+  border:0;cursor:pointer;font-family:var(--ff-sans);
 }
 .float-contact.visible{opacity:1;transform:translateY(0);}
-.float-contact:hover{background:var(--wine);}
+.float-contact:hover,.float-contact.open{background:var(--wine);}
 .float-dot{width:7px;height:7px;border-radius:50%;background:var(--gold);animation:floatPulse 1.8s ease-in-out infinite;}
+
+/* contact popover — a small card of every way to reach her, one click from the floating button */
+.contact-pop{
+  position:fixed;right:28px;bottom:92px;z-index:601;width:min(300px,calc(100vw - 56px));
+  background:var(--paper);border-radius:4px;padding:8px;
+  box-shadow:0 22px 50px rgba(12,12,12,.22),0 2px 10px rgba(12,12,12,.08);
+  opacity:0;visibility:hidden;transform:translateY(10px) scale(.96);transform-origin:bottom right;
+  transition:opacity .35s var(--ease),transform .35s var(--ease),visibility 0s linear .35s;
+}
+.contact-pop.open{
+  opacity:1;visibility:visible;transform:translateY(0) scale(1);
+  transition:opacity .35s var(--ease),transform .35s var(--ease),visibility 0s;
+}
+.contact-pop-row{
+  display:flex;flex-direction:column;gap:2px;padding:13px 14px;border-radius:2px;
+  transition:background .25s var(--ease);
+}
+.contact-pop-row:hover{background:var(--cream);}
+.contact-pop-row + .contact-pop-row{border-top:1px solid var(--line);}
+.contact-pop-label{font-size:.64rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft);}
+.contact-pop-value{font-family:var(--ff-serif);font-style:italic;font-size:1rem;color:var(--ink);}
+@media (max-width:600px){
+  .contact-pop{right:16px;bottom:82px;}
+}
 @keyframes floatPulse{0%,100%{transform:scale(1);opacity:1;}50%{transform:scale(1.7);opacity:.5;}}
 
 .reveal-armed{opacity:0;transform:translateY(22px);}
