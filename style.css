@@ -8,7 +8,7 @@
   --gold-soft:#D8C4A0;
   --line:rgba(0,0,0,.14);
   --ff-serif:'Playfair Display', serif;
-  --ff-sans:'Jost', sans-serif;
+  --ff-sans:'Instrument Sans', sans-serif;
   --ff-script:'Mrs Saint Delafield', cursive;
   --ease:cubic-bezier(.16,.84,.44,1);
 }
@@ -20,7 +20,7 @@ body{
   background:var(--paper);
   color:var(--ink);
   font-family:var(--ff-sans);
-  font-weight:300;
+  font-weight:400;
   overflow-x:hidden;
   cursor:none;
 }
