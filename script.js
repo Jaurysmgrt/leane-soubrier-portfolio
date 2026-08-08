@@ -7,7 +7,6 @@ function revealEverything(){
     el.style.opacity = '';
     el.style.transform = '';
   });
-  document.querySelectorAll('.char').forEach(el => { el.style.transform = ''; });
   document.querySelector('.site-header')?.classList.add('ready');
   document.getElementById('preloader')?.remove();
   document.body.style.overflow = '';
@@ -39,6 +38,7 @@ introTl
 try {
   const dot = document.querySelector('.cursor-dot');
   const ring = document.querySelector('.cursor-ring');
+  const label = document.getElementById('cursorLabel');
   let mx = 0, my = 0, rx = 0, ry = 0;
   window.addEventListener('mousemove', e => {
     mx = e.clientX; my = e.clientY;
@@ -47,11 +47,17 @@ try {
   (function loop(){
     rx += (mx - rx) * .16; ry += (my - ry) * .16;
     ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
+    label.style.left = rx + 'px'; label.style.top = ry + 'px';
     requestAnimationFrame(loop);
   })();
-  document.querySelectorAll('a, button, .creation-item, [data-magnetic]').forEach(el => {
+  document.querySelectorAll('a, button, [data-magnetic]').forEach(el => {
+    if (el.closest('.creation-item')) return;
     el.addEventListener('mouseenter', () => ring.classList.add('big'));
     el.addEventListener('mouseleave', () => ring.classList.remove('big'));
+  });
+  document.querySelectorAll('.creation-item').forEach(el => {
+    el.addEventListener('mouseenter', () => label.classList.add('show'));
+    el.addEventListener('mouseleave', () => label.classList.remove('show'));
   });
   document.querySelectorAll('.site-header, .section-contact').forEach(el => {
     el.addEventListener('mouseenter', () => ring.classList.add('on-dark'));
@@ -148,27 +154,28 @@ try {
   gsap.to('.hero-scroll', { opacity: 1, duration: 1, delay: 2.2 });
 } catch (e) {}
 
-/* generic reveal-up — visible by default, JS only arms the animation */
+/* generic reveal — pure opacity, tied to scroll position (no slide) */
 try {
   gsap.utils.toArray('[data-reveal]').forEach(el => {
     if (el.closest('.hero')) return;
     el.classList.add('reveal-armed');
+    el.style.transform = 'none';
     gsap.to(el, {
-      opacity: 1, y: 0, duration: 1.1, ease: 'power2.out',
-      scrollTrigger: { trigger: el, start: 'top 94%' }
+      opacity: 1, duration: .1, ease: 'none',
+      scrollTrigger: { trigger: el, start: 'top 96%', end: 'top 68%', scrub: .4 }
     });
   });
 } catch (e) {}
 
-/* char reveal for section titles */
+/* section titles — opacity + scale, tied to scroll (no slide) */
 try {
   document.querySelectorAll('[data-reveal-chars]').forEach(title => {
-    const words = title.textContent.split(' ');
-    title.innerHTML = words.map(w => `<span class="word" style="display:inline-block;overflow:hidden;"><span class="char" style="display:inline-block;">${w}</span></span>`).join(' ');
-    gsap.set(title.querySelectorAll('.char'), { yPercent: 110 });
-    gsap.to(title.querySelectorAll('.char'), {
-      yPercent: 0, duration: 1.1, ease: 'power3.out', stagger: .06,
-      scrollTrigger: { trigger: title, start: 'top 92%' }
+    title.classList.add('reveal-armed');
+    title.style.transform = 'scale(.97)';
+    title.style.transformOrigin = 'left center';
+    gsap.to(title, {
+      opacity: 1, scale: 1, duration: .1, ease: 'none',
+      scrollTrigger: { trigger: title, start: 'top 92%', end: 'top 62%', scrub: .5 }
     });
   });
 } catch (e) {}
@@ -179,6 +186,25 @@ try {
     yPercent: -10, ease: 'none',
     scrollTrigger: { trigger: '.apropos-visual', start: 'top bottom', end: 'bottom top', scrub: true }
   });
+} catch (e) {}
+
+/* values grid — scroll-scrubbed sequential reveal */
+try {
+  const cards = gsap.utils.toArray('.value-card');
+  if (cards.length) {
+    cards.forEach(c => { c.classList.add('reveal-armed'); c.style.transform = 'scale(.82)'; });
+    ScrollTrigger.create({
+      trigger: '.values-grid', start: 'top 78%', end: 'top 15%', scrub: .6,
+      onUpdate: self => {
+        const p = self.progress;
+        cards.forEach((c, i) => {
+          const cp = Math.min(1, Math.max(0, (p - i * .14) / .4));
+          c.style.opacity = cp;
+          c.style.transform = `scale(${.82 + cp * .18})`;
+        });
+      }
+    });
+  }
 } catch (e) {}
 
 /* services tilt */
@@ -334,14 +360,14 @@ try {
   });
 } catch (e) {}
 
-/* image reveals — gentle fade + scale, visible by default */
+/* image reveals — opacity + scale tied to scroll position, no slide */
 try {
   gsap.utils.toArray('.portrait-frame, .creation-thumb').forEach(box => {
     box.classList.add('reveal-armed');
-    gsap.set(box, { scale: .97 });
+    box.style.transform = 'scale(1.08)';
     gsap.to(box, {
-      opacity: 1, scale: 1, duration: .9, ease: 'power3.out',
-      scrollTrigger: { trigger: box, start: 'top 92%' }
+      opacity: 1, scale: 1, duration: .1, ease: 'none',
+      scrollTrigger: { trigger: box, start: 'top 98%', end: 'top 60%', scrub: .5 }
     });
   });
 } catch (e) {}
