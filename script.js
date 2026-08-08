@@ -16,8 +16,12 @@ window.addEventListener('load', () => setTimeout(revealEverything, 4500));
 
 try {
 
-/* preloader — simple wordmark fade */
+/* preloader — letters rise in, line draws, fades out */
 document.body.style.overflow = 'hidden';
+const preName = document.querySelector('.preloader-name');
+if (preName) {
+  preName.innerHTML = preName.textContent.split('').map(c => `<span>${c === ' ' ? '&nbsp;' : c}</span>`).join('');
+}
 const introTl = gsap.timeline({
   onComplete: () => {
     document.body.style.overflow = '';
@@ -25,9 +29,9 @@ const introTl = gsap.timeline({
   }
 });
 introTl
-  .to('.preloader-name', { opacity: 1, letterSpacing: '.06em', duration: 1, ease: 'power2.out' })
-  .to('.preloader-line', { width: '64px', duration: .7, ease: 'power3.out' }, '-=.5')
-  .to('.preloader-inner', { opacity: 0, scale: .98, duration: .4, ease: 'power2.in' }, '+=.4')
+  .to('.preloader-name span', { opacity: 1, y: 0, duration: .8, ease: 'power3.out', stagger: .03 })
+  .to('.preloader-line', { width: '64px', duration: .6, ease: 'power3.out' }, '-=.3')
+  .to('.preloader-inner', { opacity: 0, scale: .98, duration: .4, ease: 'power2.in' }, '+=.5')
   .to('#preloader', { autoAlpha: 0, duration: .35 }, '-=.15');
 
 } catch (e) { revealEverything(); }
@@ -87,7 +91,7 @@ try {
       heroImgs[heroIdx].classList.remove('active');
       heroIdx = (heroIdx + 1) % heroImgs.length;
       heroImgs[heroIdx].classList.add('active');
-    }, 4500);
+    }, 5500);
   }
 } catch (e) {}
 
