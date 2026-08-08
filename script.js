@@ -7,6 +7,20 @@ const isRepeatVisit = (function () {
 })();
 try { sessionStorage.setItem('ls-visited', '1'); } catch (e) {}
 
+/* hero safety net — this is the first thing anyone sees, so it gets its
+   own short, tight backstop instead of waiting on the global one below */
+function revealHero(){
+  document.querySelectorAll('.hero-name .line span').forEach(el => {
+    el.style.opacity = '';
+    el.style.transform = '';
+  });
+  ['.hero-role', '.hero-cta', '.hero-scroll'].forEach(sel => {
+    const el = document.querySelector(sel);
+    if (el) { el.style.opacity = ''; el.style.transform = ''; }
+  });
+}
+window.addEventListener('load', () => setTimeout(revealHero, 2600));
+
 /* global safety net — nothing on this page is allowed to stay invisible */
 function revealEverything(){
   document.querySelectorAll('.reveal-armed').forEach(el => {
@@ -14,6 +28,8 @@ function revealEverything(){
     el.style.opacity = '';
     el.style.transform = '';
   });
+  revealHero();
+  document.querySelectorAll('.word-mask .word').forEach(el => { el.style.transform = ''; });
   document.querySelector('.site-header')?.classList.add('ready');
   document.getElementById('preloader')?.remove();
   document.body.style.overflow = '';
