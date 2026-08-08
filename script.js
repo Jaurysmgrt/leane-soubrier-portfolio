@@ -8,7 +8,6 @@ function revealEverything(){
     el.style.transform = '';
   });
   document.querySelectorAll('.char').forEach(el => { el.style.transform = ''; });
-  document.querySelectorAll('.value-pill').forEach(el => { el.style.opacity = '1'; el.style.transform = 'none'; });
   document.querySelector('.site-header')?.classList.add('ready');
   document.getElementById('preloader')?.remove();
   document.body.style.overflow = '';
@@ -179,20 +178,6 @@ try {
   gsap.to('.portrait-frame img', {
     yPercent: -10, ease: 'none',
     scrollTrigger: { trigger: '.apropos-visual', start: 'top bottom', end: 'bottom top', scrub: true }
-  });
-} catch (e) {}
-
-/* values line draw */
-try {
-  document.querySelectorAll('.value-pill').forEach(p => p.classList.add('reveal-armed'));
-  gsap.set('.value-pill', { scale: .92 });
-  ScrollTrigger.create({
-    trigger: '.values-line', start: 'top 78%',
-    onEnter: () => {
-      gsap.fromTo('.values-svg line', { attr: { x2: 0 } }, { attr: { x2: 1000 }, duration: 1.2, ease: 'power3.inOut' });
-      gsap.to('.value-pill', { opacity: 1, y: 0, scale: 1, duration: .9, stagger: .1, ease: 'power3.out', delay: .25 });
-    },
-    once: true
   });
 } catch (e) {}
 
