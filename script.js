@@ -155,8 +155,8 @@ try {
     if (el.closest('.hero')) return;
     el.classList.add('reveal-armed');
     gsap.to(el, {
-      opacity: 1, y: 0, duration: .8, ease: 'power3.out',
-      scrollTrigger: { trigger: el, start: 'top 90%' }
+      opacity: 1, y: 0, duration: 1.1, ease: 'power2.out',
+      scrollTrigger: { trigger: el, start: 'top 94%' }
     });
   });
 } catch (e) {}
@@ -168,8 +168,8 @@ try {
     title.innerHTML = words.map(w => `<span class="word" style="display:inline-block;overflow:hidden;"><span class="char" style="display:inline-block;">${w}</span></span>`).join(' ');
     gsap.set(title.querySelectorAll('.char'), { yPercent: 110 });
     gsap.to(title.querySelectorAll('.char'), {
-      yPercent: 0, duration: .9, ease: 'power4.out', stagger: .07,
-      scrollTrigger: { trigger: title, start: 'top 88%' }
+      yPercent: 0, duration: 1.1, ease: 'power3.out', stagger: .06,
+      scrollTrigger: { trigger: title, start: 'top 92%' }
     });
   });
 } catch (e) {}
@@ -190,7 +190,7 @@ try {
     trigger: '.values-line', start: 'top 78%',
     onEnter: () => {
       gsap.fromTo('.values-svg line', { attr: { x2: 0 } }, { attr: { x2: 1000 }, duration: 1.2, ease: 'power3.inOut' });
-      gsap.to('.value-pill', { opacity: 1, y: 0, scale: 1, duration: .7, stagger: .1, ease: 'back.out(1.6)', delay: .25 });
+      gsap.to('.value-pill', { opacity: 1, y: 0, scale: 1, duration: .9, stagger: .1, ease: 'power3.out', delay: .25 });
     },
     once: true
   });
@@ -344,7 +344,7 @@ try {
       gsap.to(el, { x: x * .3, y: y * .3, duration: .4, ease: 'power2.out' });
     });
     el.addEventListener('mouseleave', () => {
-      gsap.to(el, { x: 0, y: 0, duration: .6, ease: 'elastic.out(1,.4)' });
+      gsap.to(el, { x: 0, y: 0, duration: .7, ease: 'power3.out' });
     });
   });
 } catch (e) {}
