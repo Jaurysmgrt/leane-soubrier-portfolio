@@ -174,6 +174,9 @@ try {
 if (window.gsap && window.ScrollTrigger) {
   gsap.registerPlugin(ScrollTrigger);
 }
+if (window.gsap && window.Flip) {
+  gsap.registerPlugin(Flip);
+}
 
 /* split hero name into chars */
 try {
@@ -207,15 +210,20 @@ try {
   });
 } catch (e) {}
 
-/* section titles — opacity + scale, tied to scroll (no slide) */
+/* section titles — split into words that rise up out of a masked line */
 try {
   document.querySelectorAll('[data-reveal-chars]').forEach(title => {
-    title.classList.add('reveal-armed');
-    title.style.transform = 'scale(.97)';
-    title.style.transformOrigin = 'left center';
-    gsap.to(title, {
-      opacity: 1, scale: 1, duration: .1, ease: 'none',
-      scrollTrigger: { trigger: title, start: 'top 92%', end: 'top 62%', scrub: .5 }
+    const text = title.textContent.trim();
+    title.innerHTML = text.split(' ').map(w =>
+      `<span class="word-mask"><span class="word">${w}</span></span>`
+    ).join(' ');
+    const words = title.querySelectorAll('.word');
+    if (reduceMotion) return;
+    gsap.set(words, { yPercent: 115 });
+    ScrollTrigger.create({
+      trigger: title, start: 'top 88%',
+      once: true,
+      onEnter: () => gsap.to(words, { yPercent: 0, duration: .9, ease: 'power4.out', stagger: .05 })
     });
   });
 } catch (e) {}
@@ -225,6 +233,14 @@ try {
   gsap.to('.portrait-frame img', {
     yPercent: -10, ease: 'none',
     scrollTrigger: { trigger: '.apropos-visual', start: 'top bottom', end: 'bottom top', scrub: true }
+  });
+} catch (e) {}
+
+/* hero — gains depth as it scrolls away: slow zoom, sinks into shadow */
+try {
+  gsap.to('#heroMedia', {
+    scale: 1.18, opacity: .35, ease: 'none',
+    scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true }
   });
 } catch (e) {}
 
@@ -278,28 +294,38 @@ try {
   });
 } catch (e) {}
 
-/* creation filters */
+/* creation filters — remaining items glide into their new spot (GSAP Flip)
+   instead of just fading, so the grid feels like it physically reflows */
 try {
   const filterBtns = document.querySelectorAll('.filter-btn');
   const creationItems = document.querySelectorAll('.creation-item');
+  const hasFlip = window.gsap && window.Flip;
+
   filterBtns.forEach(btn => {
     btn.addEventListener('click', () => {
       filterBtns.forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       const f = btn.dataset.filter;
-      creationItems.forEach(item => {
-        const cats = (item.dataset.cat || '').split(' ');
-        const show = f === 'all' || cats.includes(f);
-        if (show) {
-          item.classList.remove('is-hidden');
-          gsap.fromTo(item, { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: .5, ease: 'power2.out' });
-        } else {
-          gsap.to(item, {
-            opacity: 0, y: 16, duration: .3, ease: 'power2.in',
-            onComplete: () => item.classList.add('is-hidden')
-          });
-        }
-      });
+
+      if (hasFlip && !reduceMotion) {
+        const state = Flip.getState(creationItems);
+        creationItems.forEach(item => {
+          const cats = (item.dataset.cat || '').split(' ');
+          const show = f === 'all' || cats.includes(f);
+          item.classList.toggle('is-hidden', !show);
+        });
+        Flip.from(state, {
+          duration: .6, ease: 'power3.out', stagger: .035, absolute: true,
+          onEnter: els => gsap.fromTo(els, { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: .5, ease: 'power2.out' }),
+          onLeave: els => gsap.to(els, { opacity: 0, y: 16, duration: .3, ease: 'power2.in' })
+        });
+      } else {
+        creationItems.forEach(item => {
+          const cats = (item.dataset.cat || '').split(' ');
+          const show = f === 'all' || cats.includes(f);
+          item.classList.toggle('is-hidden', !show);
+        });
+      }
     });
   });
 } catch (e) {}
@@ -464,6 +490,34 @@ try {
       scrollTrigger: { trigger: box, start: 'top 98%', end: 'top 60%', scrub: .5 }
     });
   });
+} catch (e) {}
+
+/* footer marquee — drifts on its own, surges forward when you scroll,
+   the way a heavy object picks up momentum rather than just looping on rails */
+try {
+  const track = document.querySelector('.footer-marquee .marquee-track');
+  if (track) {
+    if (reduceMotion) {
+      track.style.transform = 'translateX(0)';
+    } else {
+      let x = 0;
+      let velocity = 0;
+      let lastY = window.scrollY;
+      let loopWidth = track.scrollWidth / 2;
+      window.addEventListener('resize', () => { loopWidth = track.scrollWidth / 2; });
+      window.addEventListener('scroll', () => {
+        velocity += (window.scrollY - lastY) * 0.6;
+        lastY = window.scrollY;
+      }, { passive: true });
+      (function tick(){
+        velocity *= 0.92;
+        x -= 0.55 + Math.min(Math.abs(velocity), 14) * 0.2;
+        if (loopWidth > 0 && x <= -loopWidth) x += loopWidth;
+        track.style.transform = `translateX(${x}px)`;
+        requestAnimationFrame(tick);
+      })();
+    }
+  }
 } catch (e) {}
 
 try { ScrollTrigger.refresh(); } catch (e) {}

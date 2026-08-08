@@ -197,7 +197,8 @@ section{padding:0 5vw;}
 .section-head{display:flex;align-items:baseline;gap:20px;margin-bottom:64px;position:relative;}
 .section-num{font-family:var(--ff-serif);font-style:italic;color:var(--gold);font-size:1rem;}
 .section-title{font-size:clamp(2.2rem,5vw,3.8rem);}
-.section-title .char{display:inline-block;}
+.word-mask{display:inline-block;overflow:hidden;vertical-align:top;padding-bottom:.08em;margin-bottom:-.08em;}
+.word-mask .word{display:inline-block;will-change:transform;}
 
 /* apropos */
 .apropos-grid{display:grid;grid-template-columns:.6fr 1.4fr;gap:min(7vw,100px);align-items:start;}
@@ -298,6 +299,13 @@ section{padding:0 5vw;}
 .creation-thumb{aspect-ratio:4/5;overflow:hidden;border-radius:2px;}
 .creation-thumb img{width:100%;height:100%;object-fit:cover;object-position:center;filter:grayscale(.35);transition:filter .4s,transform .6s var(--ease);}
 .creation-item:hover .creation-thumb img{filter:grayscale(0);transform:scale(1.04);}
+.creation-thumb{position:relative;}
+.creation-thumb::after{
+  content:'';position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:linear-gradient(115deg,transparent 40%,rgba(255,255,255,.35) 50%,transparent 60%);
+  transform:translateX(-130%);
+}
+.creation-item:hover .creation-thumb::after{transition:transform .85s var(--ease);transform:translateX(130%);}
 
 .thumb-grid{display:grid;gap:3px;aspect-ratio:auto;}
 .thumb-grid.grid-3{grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;}
@@ -416,7 +424,7 @@ section{padding:0 5vw;}
 /* footer */
 .site-footer{background:var(--paper);color:var(--ink);padding:60px 0 34px;overflow:hidden;border-top:1px solid var(--gold);}
 .footer-marquee{overflow:hidden;white-space:nowrap;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:22px 0;}
-.footer-marquee .marquee-track{animation-duration:22s;}
+.footer-marquee .marquee-track{display:inline-block;will-change:transform;}
 .footer-marquee span{font-family:var(--ff-serif);font-size:1.4rem;padding-right:0;color:var(--ink);}
 .footer-bottom{display:flex;justify-content:space-between;padding:0 5vw;margin-top:30px;font-size:.75rem;letter-spacing:.08em;color:var(--ink-soft);}
 
@@ -485,7 +493,6 @@ section{padding:0 5vw;}
   html{scroll-behavior:auto;}
   .hero-media img.active{animation:none;}
   .scroll-line i{animation:none;top:0;}
-  .footer-marquee .marquee-track{animation-duration:70s;}
   .cursor-dot,.cursor-ring,.cursor-label{display:none;}
   body.cursor-ready{cursor:auto;}
 }
