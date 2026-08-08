@@ -427,24 +427,14 @@ section{padding:0 5vw;}
 }
 .toast.show{opacity:1;transform:translate(-50%,0);}
 
-.float-contact{
-  position:fixed;right:28px;bottom:28px;z-index:600;
-  display:flex;align-items:center;gap:10px;background:var(--ink);color:var(--paper);
-  padding:14px 22px;border-radius:60px;font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;
-  box-shadow:0 10px 30px rgba(0,0,0,.25);opacity:0;transform:translateY(20px);
-  transition:opacity .5s var(--ease),transform .5s var(--ease),background .3s;
-  border:0;cursor:pointer;font-family:var(--ff-sans);
-}
-.float-contact.visible{opacity:1;transform:translateY(0);}
-.float-contact:hover,.float-contact.open{background:var(--wine);}
-.float-dot{width:7px;height:7px;border-radius:50%;background:var(--gold);animation:floatPulse 1.8s ease-in-out infinite;}
-
-/* contact popover — a small card of every way to reach her, one click from the floating button */
+/* contact popover — a small card of every way to reach her, positioned
+   next to whichever button opened it (top set dynamically in JS) */
 .contact-pop{
-  position:fixed;right:28px;bottom:92px;z-index:601;width:min(300px,calc(100vw - 56px));
+  position:fixed;top:var(--pop-top,-9999px);left:var(--pop-left,-9999px);
+  z-index:601;width:min(300px,calc(100vw - 56px));
   background:var(--paper);border-radius:4px;padding:8px;
   box-shadow:0 22px 50px rgba(12,12,12,.22),0 2px 10px rgba(12,12,12,.08);
-  opacity:0;visibility:hidden;transform:translateY(10px) scale(.96);transform-origin:bottom right;
+  opacity:0;visibility:hidden;transform:translateY(10px) scale(.96);transform-origin:var(--pop-origin,top left);
   transition:opacity .35s var(--ease),transform .35s var(--ease),visibility 0s linear .35s;
 }
 .contact-pop.open{
@@ -459,10 +449,6 @@ section{padding:0 5vw;}
 .contact-pop-row + .contact-pop-row{border-top:1px solid var(--line);}
 .contact-pop-label{font-size:.64rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft);}
 .contact-pop-value{font-family:var(--ff-serif);font-style:italic;font-size:1rem;color:var(--ink);}
-@media (max-width:600px){
-  .contact-pop{right:16px;bottom:82px;}
-}
-@keyframes floatPulse{0%,100%{transform:scale(1);opacity:1;}50%{transform:scale(1.7);opacity:.5;}}
 
 .reveal-armed{opacity:0;transform:translateY(22px);}
 
@@ -481,7 +467,6 @@ section{padding:0 5vw;}
   .logo{font-size:.82rem;letter-spacing:.04em;}
   .header-contact{font-size:.62rem;letter-spacing:.08em;}
   .vision-list li{font-size:1.4rem;}
-  .float-contact{right:16px;bottom:16px;padding:12px 18px;font-size:.7rem;}
   .filters{gap:8px;}
   .filter-btn{padding:7px 14px;font-size:.68rem;}
   .hero-name{font-size:clamp(2.4rem,13vw,5rem);}
@@ -500,7 +485,6 @@ section{padding:0 5vw;}
   html{scroll-behavior:auto;}
   .hero-media img.active{animation:none;}
   .scroll-line i{animation:none;top:0;}
-  .float-dot{animation:none;}
   .footer-marquee .marquee-track{animation-duration:70s;}
   .cursor-dot,.cursor-ring,.cursor-label{display:none;}
   body.cursor-ready{cursor:auto;}

@@ -370,53 +370,59 @@ try {
   });
 } catch (e) {}
 
-/* floating contact button */
+/* contact popover — the hero's "Me contacter" button opens a small card
+   with every contact channel, instead of jumping straight into a mail client */
 try {
-  const floatContact = document.getElementById('floatContact');
-  ScrollTrigger.create({
-    trigger: '#apropos', start: 'top center',
-    onEnter: () => floatContact.classList.add('visible'),
-    onLeaveBack: () => floatContact.classList.remove('visible')
-  });
-  ScrollTrigger.create({
-    trigger: '#contact', start: 'top center',
-    onEnter: () => floatContact.classList.remove('visible'),
-    onLeaveBack: () => floatContact.classList.add('visible')
-  });
-} catch (e) {}
-
-/* contact popover — the floating button opens a small card with every
-   contact channel, instead of jumping straight into a mail client */
-try {
-  const floatContact = document.getElementById('floatContact');
+  const contactBtn = document.getElementById('heroContactBtn');
   const pop = document.getElementById('contactPop');
   const popLinks = pop.querySelectorAll('a');
 
+  function positionPop(){
+    const r = contactBtn.getBoundingClientRect();
+    const popWidth = Math.min(300, window.innerWidth - 56);
+    let left = r.left;
+    if (left + popWidth > window.innerWidth - 16) left = window.innerWidth - popWidth - 16;
+    if (left < 16) left = 16;
+
+    const popHeight = pop.offsetHeight || 180;
+    const spaceBelow = window.innerHeight - r.bottom;
+    let top, origin;
+    if (spaceBelow < popHeight + 24 && r.top > popHeight + 24) {
+      top = r.top - popHeight - 12;
+      origin = 'bottom left';
+    } else {
+      top = r.bottom + 12;
+      origin = 'top left';
+    }
+    pop.style.setProperty('--pop-left', left + 'px');
+    pop.style.setProperty('--pop-top', top + 'px');
+    pop.style.setProperty('--pop-origin', origin);
+  }
   function openPop(){
+    positionPop();
     pop.classList.add('open');
     pop.setAttribute('aria-hidden', 'false');
-    floatContact.classList.add('open');
-    floatContact.setAttribute('aria-expanded', 'true');
+    contactBtn.setAttribute('aria-expanded', 'true');
     popLinks.forEach(a => a.tabIndex = 0);
   }
   function closePop(){
     pop.classList.remove('open');
     pop.setAttribute('aria-hidden', 'true');
-    floatContact.classList.remove('open');
-    floatContact.setAttribute('aria-expanded', 'false');
+    contactBtn.setAttribute('aria-expanded', 'false');
     popLinks.forEach(a => a.tabIndex = -1);
   }
-  floatContact.addEventListener('click', () => {
+  contactBtn.addEventListener('click', () => {
     pop.classList.contains('open') ? closePop() : openPop();
   });
   document.addEventListener('click', e => {
     if (!pop.classList.contains('open')) return;
-    if (e.target === floatContact || floatContact.contains(e.target)) return;
+    if (e.target === contactBtn || contactBtn.contains(e.target)) return;
     if (!pop.contains(e.target)) closePop();
   });
   document.addEventListener('keydown', e => {
-    if (e.key === 'Escape' && pop.classList.contains('open')) { closePop(); floatContact.focus(); }
+    if (e.key === 'Escape' && pop.classList.contains('open')) { closePop(); contactBtn.focus(); }
   });
+  window.addEventListener('resize', () => { if (pop.classList.contains('open')) positionPop(); });
 } catch (e) {}
 
 /* contact section — ambient light that follows the cursor, desktop only */
