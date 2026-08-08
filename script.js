@@ -81,7 +81,7 @@ if (isFinePointer) {
       });
       el.addEventListener('mouseleave', () => label.classList.remove('show'));
     });
-    document.querySelectorAll('.site-header, .section-contact').forEach(el => {
+    document.querySelectorAll('.site-header, .section-contact, .section-creations').forEach(el => {
       el.addEventListener('mouseenter', () => ring.classList.add('on-dark'));
       el.addEventListener('mouseleave', () => ring.classList.remove('on-dark'));
     });
