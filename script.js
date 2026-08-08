@@ -239,7 +239,11 @@ try {
     ScrollTrigger.create({
       trigger: title, start: 'top 88%',
       once: true,
-      onEnter: () => gsap.to(words, { yPercent: 0, duration: .9, ease: 'power4.out', stagger: .05 })
+      onEnter: () => {
+        gsap.to(words, { yPercent: 0, duration: .9, ease: 'power4.out', stagger: .05 });
+        // real-timer backstop: never leave a title clipped mid-reveal
+        setTimeout(() => words.forEach(w => { w.style.transform = ''; }), 1600);
+      }
     });
   });
 } catch (e) {}
