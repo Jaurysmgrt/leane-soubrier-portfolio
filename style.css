@@ -22,8 +22,14 @@ body{
   font-family:var(--ff-sans);
   font-weight:400;
   overflow-x:hidden;
-  cursor:none;
 }
+/* cursor:none only applies once the JS cursor is confirmed running —
+   if the script fails to load, the real system cursor stays visible */
+body.cursor-ready{cursor:none;}
+
+:focus-visible{outline:2px solid var(--gold);outline-offset:3px;border-radius:2px;}
+.dot-nav a:focus-visible::before{opacity:1;}
+.swatch:focus-visible,.filter-btn:focus-visible{outline-offset:2px;}
 img{max-width:100%;display:block;}
 a{color:inherit;text-decoration:none;}
 ul{margin:0;padding:0;list-style:none;}
@@ -48,12 +54,21 @@ p{margin:0;}
 
 .cursor-label{
   position:fixed;top:0;left:0;z-index:9999;pointer-events:none;
-  width:74px;height:74px;border-radius:50%;background:var(--ink);color:var(--paper);
-  display:flex;align-items:center;justify-content:center;
-  transform:translate(-50%,-50%) scale(0);opacity:0;transition:transform .35s var(--ease),opacity .3s;
+  width:190px;
+  transform:translate(calc(-50% + 34px),calc(-50% - 128px)) scale(.85) rotate(-3deg);
+  opacity:0;transition:transform .45s var(--ease),opacity .3s;
 }
-.cursor-label.show{transform:translate(-50%,-50%) scale(1);opacity:1;}
-.cursor-label span{font-family:var(--ff-sans);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;}
+.cursor-label.show{transform:translate(calc(-50% + 34px),calc(-50% - 128px)) scale(1) rotate(-2deg);opacity:1;}
+.cursor-label-frame{
+  aspect-ratio:4/5;border-radius:2px;overflow:hidden;background:var(--ink);
+  box-shadow:0 18px 40px rgba(12,12,12,.28);
+}
+.cursor-label-frame img{width:100%;height:100%;object-fit:cover;filter:grayscale(.1);}
+.cursor-label-tag{
+  display:block;margin-top:10px;text-align:center;font-family:var(--ff-sans);
+  font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink);
+  background:var(--paper);padding:7px 0;border-radius:40px;border:1px solid var(--line);
+}
 
 @media (hover:none), (max-width:860px){
   .cursor-dot,.cursor-ring,.cursor-label{display:none;}
@@ -435,4 +450,14 @@ section{padding:0 5vw;}
   .header-contact{display:none;}
   .site-header{grid-template-columns:auto 1fr;}
   .logo{text-align:left;padding-left:14px;}
+}
+
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto;}
+  .hero-media img.active{animation:none;}
+  .scroll-line i{animation:none;top:0;}
+  .float-dot{animation:none;}
+  .footer-marquee .marquee-track{animation-duration:70s;}
+  .cursor-dot,.cursor-ring,.cursor-label{display:none;}
+  body.cursor-ready{cursor:auto;}
 }

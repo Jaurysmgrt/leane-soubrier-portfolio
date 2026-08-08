@@ -1,5 +1,12 @@
 document.getElementById('year').textContent = new Date().getFullYear();
 
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const isFinePointer = window.matchMedia('(pointer: fine)').matches;
+const isRepeatVisit = (function () {
+  try { return sessionStorage.getItem('ls-visited') === '1'; } catch (e) { return false; }
+})();
+try { sessionStorage.setItem('ls-visited', '1'); } catch (e) {}
+
 /* global safety net — nothing on this page is allowed to stay invisible */
 function revealEverything(){
   document.querySelectorAll('.reveal-armed').forEach(el => {
@@ -13,57 +20,73 @@ function revealEverything(){
 }
 window.addEventListener('load', () => setTimeout(revealEverything, 5500));
 
-try {
+/* preloader — skipped on repeat visits within the session, and for
+   users who asked for reduced motion, so returning visitors aren't
+   forced through the intro every time */
+if (reduceMotion || isRepeatVisit) {
+  document.getElementById('preloader')?.remove();
+  document.querySelector('.site-header')?.classList.add('ready');
+} else {
+  try {
+    document.body.style.overflow = 'hidden';
+    const introTl = gsap.timeline({
+      onComplete: () => {
+        document.body.style.overflow = '';
+        document.getElementById('preloader')?.remove();
+      }
+    });
+    introTl
+      .to('.preloader-name', { opacity: 1, duration: 1, ease: 'sine.inOut' })
+      .to('.preloader-line', { width: '56px', duration: .8, ease: 'sine.inOut' }, '-=.4')
+      .to('.preloader-role', { opacity: 1, duration: .7, ease: 'sine.inOut' }, '-=.5')
+      .to('.site-header', { opacity: 1, duration: .7, ease: 'sine.inOut' }, '-=.3')
+      .to('.preloader-inner', { opacity: 0, duration: .6, ease: 'sine.inOut' }, '+=.55')
+      .to('#preloader', { autoAlpha: 0, duration: .6, ease: 'sine.inOut' }, '-=.3');
+  } catch (e) { revealEverything(); }
+}
 
-/* preloader — plain fade, header stays hidden underneath until ready */
-document.body.style.overflow = 'hidden';
-
-const introTl = gsap.timeline({
-  onComplete: () => {
-    document.body.style.overflow = '';
-    document.getElementById('preloader')?.remove();
-  }
-});
-introTl
-  .to('.preloader-name', { opacity: 1, duration: 1, ease: 'sine.inOut' })
-  .to('.preloader-line', { width: '56px', duration: .8, ease: 'sine.inOut' }, '-=.4')
-  .to('.preloader-role', { opacity: 1, duration: .7, ease: 'sine.inOut' }, '-=.5')
-  .to('.site-header', { opacity: 1, duration: .7, ease: 'sine.inOut' }, '-=.3')
-  .to('.preloader-inner', { opacity: 0, duration: .6, ease: 'sine.inOut' }, '+=.55')
-  .to('#preloader', { autoAlpha: 0, duration: .6, ease: 'sine.inOut' }, '-=.3');
-
-} catch (e) { revealEverything(); }
-
-/* custom cursor */
-try {
-  const dot = document.querySelector('.cursor-dot');
-  const ring = document.querySelector('.cursor-ring');
-  const label = document.getElementById('cursorLabel');
-  let mx = 0, my = 0, rx = 0, ry = 0;
-  window.addEventListener('mousemove', e => {
-    mx = e.clientX; my = e.clientY;
-    dot.style.left = mx + 'px'; dot.style.top = my + 'px';
-  });
-  (function loop(){
-    rx += (mx - rx) * .16; ry += (my - ry) * .16;
-    ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
-    label.style.left = rx + 'px'; label.style.top = ry + 'px';
-    requestAnimationFrame(loop);
-  })();
-  document.querySelectorAll('a, button, [data-magnetic]').forEach(el => {
-    if (el.closest('.creation-item')) return;
-    el.addEventListener('mouseenter', () => ring.classList.add('big'));
-    el.addEventListener('mouseleave', () => ring.classList.remove('big'));
-  });
-  document.querySelectorAll('.creation-item').forEach(el => {
-    el.addEventListener('mouseenter', () => label.classList.add('show'));
-    el.addEventListener('mouseleave', () => label.classList.remove('show'));
-  });
-  document.querySelectorAll('.site-header, .section-contact').forEach(el => {
-    el.addEventListener('mouseenter', () => ring.classList.add('on-dark'));
-    el.addEventListener('mouseleave', () => ring.classList.remove('on-dark'));
-  });
-} catch (e) {}
+/* custom cursor — only takes over the pointer once it's actually running */
+if (isFinePointer) {
+  try {
+    const dot = document.querySelector('.cursor-dot');
+    const ring = document.querySelector('.cursor-ring');
+    const label = document.getElementById('cursorLabel');
+    const labelImg = document.getElementById('cursorLabelImg');
+    document.body.classList.add('cursor-ready');
+    let mx = 0, my = 0, rx = 0, ry = 0;
+    window.addEventListener('mousemove', e => {
+      mx = e.clientX; my = e.clientY;
+      dot.style.left = mx + 'px'; dot.style.top = my + 'px';
+    });
+    (function loop(){
+      rx += (mx - rx) * .16; ry += (my - ry) * .16;
+      ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
+      label.style.left = rx + 'px'; label.style.top = ry + 'px';
+      requestAnimationFrame(loop);
+    })();
+    document.querySelectorAll('a, button, [data-magnetic]').forEach(el => {
+      if (el.closest('.creation-item')) return;
+      el.addEventListener('mouseenter', () => ring.classList.add('big'));
+      el.addEventListener('mouseleave', () => ring.classList.remove('big'));
+    });
+    /* the cursor becomes a floating preview of the project being hovered */
+    document.querySelectorAll('.creation-item').forEach(el => {
+      const preview = el.querySelector('.creation-thumb img');
+      el.addEventListener('mouseenter', () => {
+        if (preview) {
+          labelImg.src = preview.currentSrc || preview.src;
+          labelImg.alt = preview.alt || '';
+        }
+        label.classList.add('show');
+      });
+      el.addEventListener('mouseleave', () => label.classList.remove('show'));
+    });
+    document.querySelectorAll('.site-header, .section-contact').forEach(el => {
+      el.addEventListener('mouseenter', () => ring.classList.add('on-dark'));
+      el.addEventListener('mouseleave', () => ring.classList.remove('on-dark'));
+    });
+  } catch (e) {}
+}
 
 /* progress bar */
 try {
@@ -99,6 +122,23 @@ try {
     }, 5500);
   }
 } catch (e) {}
+
+/* hero — subtle cursor-driven depth, desktop only */
+if (isFinePointer && !reduceMotion) {
+  try {
+    const heroMedia = document.getElementById('heroMedia');
+    const hero = document.getElementById('hero');
+    hero.addEventListener('mousemove', e => {
+      const r = hero.getBoundingClientRect();
+      const px = (e.clientX - r.left) / r.width - .5;
+      const py = (e.clientY - r.top) / r.height - .5;
+      gsap.to(heroMedia, { x: px * -18, y: py * -12, duration: 1, ease: 'power2.out' });
+    });
+    hero.addEventListener('mouseleave', () => {
+      gsap.to(heroMedia, { x: 0, y: 0, duration: 1, ease: 'power3.out' });
+    });
+  } catch (e) {}
+}
 
 /* mobile nav */
 try {
