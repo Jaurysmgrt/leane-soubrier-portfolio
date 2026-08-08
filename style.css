@@ -134,6 +134,7 @@ section{padding:0 5vw;}
 .hero{
   height:100vh;height:100svh;min-height:560px;position:relative;overflow:hidden;
   display:flex;align-items:flex-end;padding:0;
+  background:var(--ink); /* fallback so white hero text is never invisible-on-white while the photo loads */
 }
 .hero-media{position:absolute;inset:0;z-index:0;}
 .hero-media img{
