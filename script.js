@@ -16,13 +16,11 @@ window.addEventListener('load', () => setTimeout(revealEverything, 5500));
 
 try {
 
-/* preloader — giant wordmark, counter, curtain exit */
+/* preloader — signature draws in, then dissolves */
 document.body.style.overflow = 'hidden';
 document.querySelectorAll('.pre-line').forEach(line => {
-  line.innerHTML = line.textContent.split('').map(c => `<span>${c}</span>`).join('');
+  line.innerHTML = line.textContent.split('').map(c => `<span>${c === ' ' ? '&nbsp;' : c}</span>`).join('');
 });
-const counterEl = document.getElementById('preCounter');
-const counterObj = { v: 0 };
 
 const introTl = gsap.timeline({
   onComplete: () => {
@@ -31,16 +29,11 @@ const introTl = gsap.timeline({
   }
 });
 introTl
-  .to('.preloader-kicker, .preloader-counter, .preloader-role', { opacity: 1, duration: .6, ease: 'power2.out' })
-  .to('.pre-line span', { opacity: 1, y: 0, filter: 'blur(0px)', duration: 1, ease: 'power4.out', stagger: .025 }, '-=.3')
-  .to(counterObj, {
-    v: 100, duration: 1.6, ease: 'power1.inOut',
-    onUpdate: () => { counterEl.textContent = String(Math.round(counterObj.v)).padStart(2, '0'); }
-  }, '-=1.3')
-  .to('.preloader-name, .preloader-kicker, .preloader-role, .preloader-counter', {
-    opacity: 0, y: -18, duration: .5, ease: 'power2.in', stagger: .02
-  }, '+=.35')
-  .to('.preloader', { yPercent: -100, duration: .8, ease: 'power4.inOut' }, '-=.1');
+  .to('.pre-line span', { opacity: 1, y: 0, filter: 'blur(0px)', duration: 1.1, ease: 'power3.out', stagger: .028 })
+  .to('.preloader-line', { width: '56px', duration: .7, ease: 'power3.out' }, '-=.5')
+  .to('.preloader-role', { opacity: 1, duration: .6, ease: 'power2.out' }, '-=.35')
+  .to('.preloader-inner', { opacity: 0, filter: 'blur(10px)', duration: .7, ease: 'power2.in' }, '+=.6')
+  .to('#preloader', { autoAlpha: 0, duration: .5 }, '-=.3');
 
 } catch (e) { revealEverything(); }
 
