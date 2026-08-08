@@ -67,7 +67,6 @@ if (isFinePointer) {
     const dot = document.querySelector('.cursor-dot');
     const ring = document.querySelector('.cursor-ring');
     const label = document.getElementById('cursorLabel');
-    const labelImg = document.getElementById('cursorLabelImg');
     document.body.classList.add('cursor-ready');
     let mx = 0, my = 0, rx = 0, ry = 0;
     window.addEventListener('mousemove', e => {
@@ -85,16 +84,8 @@ if (isFinePointer) {
       el.addEventListener('mouseenter', () => ring.classList.add('big'));
       el.addEventListener('mouseleave', () => ring.classList.remove('big'));
     });
-    /* the cursor becomes a floating preview of the project being hovered */
     document.querySelectorAll('.creation-item').forEach(el => {
-      const preview = el.querySelector('.creation-thumb img');
-      el.addEventListener('mouseenter', () => {
-        if (preview) {
-          labelImg.src = preview.currentSrc || preview.src;
-          labelImg.alt = preview.alt || '';
-        }
-        label.classList.add('show');
-      });
+      el.addEventListener('mouseenter', () => label.classList.add('show'));
       el.addEventListener('mouseleave', () => label.classList.remove('show'));
     });
     document.querySelectorAll('.site-header, .section-contact, .section-creations').forEach(el => {
@@ -114,17 +105,7 @@ try {
   }, { passive: true });
 } catch (e) {}
 
-/* header hide on scroll down */
-try {
-  let lastY = 0;
-  const header = document.getElementById('siteHeader');
-  window.addEventListener('scroll', () => {
-    const y = window.scrollY;
-    if (y > lastY && y > 200) header.classList.add('hide');
-    else header.classList.remove('hide');
-    lastY = y;
-  }, { passive: true });
-} catch (e) {}
+/* header stays fixed and visible at all times — no hide-on-scroll */
 
 /* hero slideshow */
 try {
@@ -469,6 +450,22 @@ try {
     if (e.key === 'Escape' && pop.classList.contains('open')) { closePop(); contactBtn.focus(); }
   });
   window.addEventListener('resize', () => { if (pop.classList.contains('open')) positionPop(); });
+} catch (e) {}
+
+/* contact form — no backend on a static site, so it opens the visitor's
+   own mail app with everything prefilled, straight to Léane's inbox */
+try {
+  const form = document.getElementById('contactForm');
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    const name = form.name.value.trim();
+    const email = form.email.value.trim();
+    const message = form.message.value.trim();
+    if (!name || !email || !message) return;
+    const subject = encodeURIComponent(`Contact via le portfolio — ${name}`);
+    const body = encodeURIComponent(`${message}\n\n—\n${name}\n${email}`);
+    window.location.href = `mailto:lsoubrier.contact@gmail.com?subject=${subject}&body=${body}`;
+  });
 } catch (e) {}
 
 /* contact section — ambient light that follows the cursor, desktop only */
