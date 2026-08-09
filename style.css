@@ -228,15 +228,14 @@ section{padding:0 5vw;}
 .value-card{
   background:var(--paper);padding:40px 28px;font-family:var(--ff-sans);font-weight:500;
   font-size:clamp(1.2rem,2vw,1.6rem);color:var(--ink);
-  transition:background .35s var(--ease),color .35s var(--ease),transform .5s var(--ease);
-  transform-style:preserve-3d;will-change:transform;
+  transition:background .4s var(--ease),color .4s var(--ease);
 }
 .value-card span{
   display:block;font-family:var(--ff-accent);font-style:italic;font-weight:400;color:var(--gold);
   font-size:.95rem;margin-bottom:22px;transition:transform .4s var(--ease);
 }
 .value-card:hover{background:var(--ink);color:var(--paper);}
-.value-card:hover span{transform:translateZ(24px);}
+.value-card:hover span{transform:translateY(-3px);}
 
 .vision-block{margin-top:min(110px,11vh);display:flex;flex-wrap:wrap;align-items:center;gap:22px;}
 .vision-label{

@@ -574,7 +574,7 @@ try {
       }, { passive: true });
       (function tick(){
         velocity *= 0.92;
-        x -= 0.55 + Math.min(Math.abs(velocity), 14) * 0.2;
+        x -= 1.3 + Math.min(Math.abs(velocity), 14) * 0.2;
         if (loopWidth > 0 && x <= -loopWidth) x += loopWidth;
         track.style.transform = `translateX(${x}px)`;
         requestAnimationFrame(tick);
