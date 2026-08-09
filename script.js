@@ -359,7 +359,9 @@ try {
   const elDesc = document.getElementById('projectDesc');
   const elGallery = document.getElementById('projectGallery');
   const elCount = document.getElementById('projectCount');
+  const elTag = document.getElementById('projectTag');
   const hasFlip = window.gsap && window.Flip;
+  const catLabels = { bijoux: 'Bijoux', mode: 'Mode', dessin: 'Dessin', ia: 'Shooting IA', collab: 'Collaboration' };
   let currentProject = 0;
 
   function renderProject(i, skipTextAnim) {
@@ -371,10 +373,12 @@ try {
     const desc = item.querySelector('.full-desc')?.textContent.trim() || '';
     const imgs = item.querySelectorAll('.creation-thumb img, .extra-gallery img');
     const cover = item.querySelector('.tile-cover');
+    const cats = (item.dataset.cat || '').split(' ').filter(Boolean).map(c => catLabels[c] || c);
 
     elHero.src = cover ? (cover.currentSrc || cover.src) : (imgs[0] ? (imgs[0].currentSrc || imgs[0].src) : '');
     elHero.alt = title;
     elIndex.textContent = idx;
+    elTag.textContent = cats.join(' · ');
     elTitle.textContent = title;
     elDesc.textContent = desc;
     elGallery.innerHTML = '';
