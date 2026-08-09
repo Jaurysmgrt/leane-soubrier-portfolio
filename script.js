@@ -296,18 +296,19 @@ try {
 } catch (e) {}
 
 
-/* palette copy */
+/* palette copy — delegated so it also works on swatches cloned into the
+   project detail page, not just the ones present at load */
 try {
   const toast = document.getElementById('toast');
-  document.querySelectorAll('.swatch').forEach(sw => {
-    sw.addEventListener('click', () => {
-      const hex = sw.dataset.copy;
-      navigator.clipboard?.writeText(hex).catch(() => {});
-      toast.textContent = `${sw.dataset.name} — ${hex} copié ✓`;
-      toast.classList.add('show');
-      clearTimeout(sw._t);
-      sw._t = setTimeout(() => toast.classList.remove('show'), 1800);
-    });
+  document.addEventListener('click', e => {
+    const sw = e.target.closest('.swatch');
+    if (!sw) return;
+    const hex = sw.dataset.copy;
+    navigator.clipboard?.writeText(hex).catch(() => {});
+    toast.textContent = `${sw.dataset.name} — ${hex} copié ✓`;
+    toast.classList.add('show');
+    clearTimeout(toast._t);
+    toast._t = setTimeout(() => toast.classList.remove('show'), 1800);
   });
 } catch (e) {}
 
@@ -360,6 +361,8 @@ try {
   const elGallery = document.getElementById('projectGallery');
   const elCount = document.getElementById('projectCount');
   const elTag = document.getElementById('projectTag');
+  const elPalette = document.getElementById('projectPalette');
+  const elPaletteSwatches = document.getElementById('projectPaletteSwatches');
   const hasFlip = window.gsap && window.Flip;
   const catLabels = { bijoux: 'Bijoux', mode: 'Mode', dessin: 'Dessin', ia: 'Shooting IA', collab: 'Collaboration' };
   let currentProject = 0;
@@ -389,6 +392,15 @@ try {
       if (img.classList.contains('wm-src')) clone.className = 'wm-src';
       elGallery.appendChild(clone);
     });
+    const paletteSource = item.querySelector('.palette');
+    if (paletteSource) {
+      elPaletteSwatches.innerHTML = paletteSource.innerHTML;
+      elPalette.hidden = false;
+    } else {
+      elPaletteSwatches.innerHTML = '';
+      elPalette.hidden = true;
+    }
+
     elCount.textContent = `${i + 1} / ${items.length}`;
     page.scrollTop = 0;
 
