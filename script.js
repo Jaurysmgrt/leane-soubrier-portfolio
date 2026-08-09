@@ -7,6 +7,22 @@ const isRepeatVisit = (function () {
 })();
 try { sessionStorage.setItem('ls-visited', '1'); } catch (e) {}
 
+/* content images fade in as they finish loading, instead of popping in
+   the instant the network delivers them */
+try {
+  document.querySelectorAll('main img').forEach(img => {
+    if (img.closest('#heroMedia')) return;
+    img.classList.add('fade-img');
+    const markLoaded = () => img.classList.add('is-loaded');
+    if (img.complete && img.naturalWidth > 0) markLoaded();
+    else {
+      img.addEventListener('load', markLoaded);
+      img.addEventListener('error', markLoaded);
+      setTimeout(markLoaded, 4000); // never leave an image invisible
+    }
+  });
+} catch (e) {}
+
 /* hero safety net — this is the first thing anyone sees, so it gets its
    own short, tight backstop instead of waiting on the global one below */
 function revealHero(){
@@ -331,25 +347,33 @@ try {
   });
 } catch (e) {}
 
-/* project detail pages */
+/* project detail pages — clicking a tile expands its cover photo straight
+   into the hero of the detail page (GSAP Flip), instead of just opening
+   a panel on top of everything */
 try {
   const items = Array.from(document.querySelectorAll('.creation-item'));
   const page = document.getElementById('projectPage');
+  const elHero = document.getElementById('projectHeroImg');
   const elIndex = document.getElementById('projectIndex');
   const elTitle = document.getElementById('projectTitle');
   const elDesc = document.getElementById('projectDesc');
   const elGallery = document.getElementById('projectGallery');
   const elCount = document.getElementById('projectCount');
+  const hasFlip = window.gsap && window.Flip;
   let currentProject = 0;
 
-  function renderProject(i) {
+  function renderProject(i, skipTextAnim) {
     const item = items[i];
     if (!item) return;
     currentProject = i;
     const idx = item.querySelector('.creation-index')?.textContent.trim() || '';
     const title = item.querySelector('h3')?.textContent.trim() || '';
-    const desc = item.querySelector('.full-desc')?.textContent.trim() || item.querySelector('p')?.textContent.trim() || '';
+    const desc = item.querySelector('.full-desc')?.textContent.trim() || '';
     const imgs = item.querySelectorAll('.creation-thumb img, .extra-gallery img');
+    const cover = item.querySelector('.tile-cover');
+
+    elHero.src = cover ? (cover.currentSrc || cover.src) : (imgs[0] ? (imgs[0].currentSrc || imgs[0].src) : '');
+    elHero.alt = title;
     elIndex.textContent = idx;
     elTitle.textContent = title;
     elDesc.textContent = desc;
@@ -364,14 +388,33 @@ try {
     elCount.textContent = `${i + 1} / ${items.length}`;
     page.scrollTop = 0;
 
-    gsap.fromTo([elIndex, elTitle, elDesc], { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: .6, stagger: .08, ease: 'power3.out' });
-    gsap.fromTo(elGallery.children, { opacity: 0, y: 28 }, { opacity: 1, y: 0, duration: .7, stagger: .07, ease: 'power3.out', delay: .1 });
+    if (!skipTextAnim) {
+      gsap.fromTo([elIndex, elTitle, elDesc], { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: .6, stagger: .08, ease: 'power3.out' });
+      gsap.fromTo(elGallery.children, { opacity: 0, y: 28 }, { opacity: 1, y: 0, duration: .7, stagger: .07, ease: 'power3.out', delay: .1 });
+    }
   }
 
-  function openProject(i) {
-    renderProject(i);
-    page.classList.add('open');
-    document.body.style.overflow = 'hidden';
+  function openProject(i, sourceTile) {
+    const tileImg = sourceTile && sourceTile.querySelector('.tile-cover');
+    if (hasFlip && tileImg && !reduceMotion) {
+      const state = Flip.getState(tileImg);
+      renderProject(i, true);
+      page.classList.add('open');
+      document.body.style.overflow = 'hidden';
+      requestAnimationFrame(() => {
+        Flip.from(state, {
+          targets: elHero, duration: .9, ease: 'power3.inOut', absolute: true,
+          onComplete: () => {
+            gsap.fromTo([elIndex, elTitle, elDesc], { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: .5, stagger: .08, ease: 'power3.out' });
+            gsap.fromTo(elGallery.children, { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: .6, stagger: .06, ease: 'power3.out' });
+          }
+        });
+      });
+    } else {
+      renderProject(i);
+      page.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
   }
 
   function closeProject() {
@@ -382,7 +425,10 @@ try {
   items.forEach((item, i) => {
     item.addEventListener('click', (e) => {
       if (e.target.closest('.swatch')) return;
-      openProject(i);
+      openProject(i, item);
+    });
+    item.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openProject(i, item); }
     });
   });
 
