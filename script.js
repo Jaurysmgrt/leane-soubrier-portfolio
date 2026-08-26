@@ -39,14 +39,15 @@ window.addEventListener('load', () => setTimeout(revealHero, 2600));
 
 /* global safety net — nothing on this page is allowed to stay invisible */
 function revealEverything(){
-  document.querySelectorAll('.reveal-armed').forEach(el => {
-    el.classList.remove('reveal-armed');
+  document.querySelectorAll('.reveal-armed, .reveal-armed-op').forEach(el => {
+    el.classList.remove('reveal-armed', 'reveal-armed-op');
     el.style.opacity = '';
     el.style.transform = '';
   });
   revealHero();
   document.querySelectorAll('.word-mask .word').forEach(el => { el.style.transform = ''; });
   document.querySelector('.site-header')?.classList.add('ready');
+  document.getElementById('heroMedia')?.classList.add('bloomed');
   document.getElementById('preloader')?.remove();
   document.body.style.overflow = '';
 }
@@ -58,6 +59,7 @@ window.addEventListener('load', () => setTimeout(revealEverything, 5500));
 if (reduceMotion || isRepeatVisit) {
   document.getElementById('preloader')?.remove();
   document.querySelector('.site-header')?.classList.add('ready');
+  document.getElementById('heroMedia')?.classList.add('bloomed');
 } else {
   try {
     document.body.style.overflow = 'hidden';
@@ -73,6 +75,7 @@ if (reduceMotion || isRepeatVisit) {
       .to('.preloader-role', { opacity: 1, duration: .7, ease: 'sine.inOut' }, '-=.5')
       .to('.site-header', { opacity: 1, duration: .7, ease: 'sine.inOut' }, '-=.3')
       .to('.preloader-inner', { opacity: 0, duration: .6, ease: 'sine.inOut' }, '+=.55')
+      .add(() => document.getElementById('heroMedia')?.classList.add('bloomed'), '-=.5')
       .to('#preloader', { autoAlpha: 0, duration: .6, ease: 'sine.inOut' }, '-=.3');
   } catch (e) { revealEverything(); }
 }
@@ -219,6 +222,41 @@ try {
     gsap.to(el, {
       opacity: 1, duration: .1, ease: 'none',
       scrollTrigger: { trigger: el, start: 'top 96%', end: 'top 68%', scrub: .4 }
+    });
+  });
+} catch (e) {}
+
+/* opacity-only reveal — for elements whose own hover state already animates
+   transform (service cards lift on hover); a slide reveal would fight that */
+try {
+  gsap.utils.toArray('[data-reveal-fade]').forEach(el => {
+    el.classList.add('reveal-armed-op');
+    gsap.to(el, {
+      opacity: 1, duration: .1, ease: 'none',
+      scrollTrigger: { trigger: el, start: 'top 92%', end: 'top 65%', scrub: .4 }
+    });
+  });
+} catch (e) {}
+
+/* section numbers — count up from 00 as they enter view, like a spec sheet */
+try {
+  document.querySelectorAll('.section-num').forEach(el => {
+    const full = el.textContent.trim();
+    const m = full.match(/^(\d+)(.*)$/);
+    if (!m || reduceMotion) return;
+    const targetNum = parseInt(m[1], 10);
+    const suffix = m[2];
+    const pad = m[1].length;
+    ScrollTrigger.create({
+      trigger: el, start: 'top 92%', once: true,
+      onEnter: () => {
+        const obj = { v: 0 };
+        gsap.to(obj, {
+          v: targetNum, duration: 1.1, ease: 'power2.out',
+          onUpdate: () => { el.textContent = String(Math.round(obj.v)).padStart(pad, '0') + suffix; },
+          onComplete: () => { el.textContent = full; }
+        });
+      }
     });
   });
 } catch (e) {}

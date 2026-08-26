@@ -141,8 +141,9 @@ section{padding:0 5vw;}
 .hero-media{position:absolute;inset:0;z-index:0;}
 .hero-media img{
   position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 16%;
-  filter:grayscale(.15);opacity:0;transition:opacity 2s ease;transform:scale(1.02);
+  filter:grayscale(1);opacity:0;transition:opacity 2s ease,filter 1.8s ease;transform:scale(1.02);
 }
+.hero-media.bloomed img{filter:grayscale(.15);}
 .hero-media img.active{opacity:1;animation:kenburns 10s ease-out forwards;}
 @keyframes kenburns{from{transform:scale(1.02);}to{transform:scale(1.08);}}
 .hero-media::after{
@@ -166,6 +167,14 @@ section{padding:0 5vw;}
 }
 .btn-fill{background:var(--paper);color:var(--ink);border:1px solid var(--paper);}
 .btn-fill:hover{background:var(--gold);border-color:var(--gold);}
+/* breathing gold glow on the primary hero CTA — a quiet invitation to click,
+   starts once the intro reveal has finished so it never competes with it */
+@keyframes ctaGlow{
+  0%,100%{box-shadow:0 0 0 0 rgba(184,147,90,.38);}
+  50%{box-shadow:0 0 0 11px rgba(184,147,90,0);}
+}
+.hero-cta .btn-fill{animation:ctaGlow 3.2s ease-out 3.2s infinite;}
+.hero-cta .btn-fill:hover{animation-play-state:paused;}
 .btn-line{background:transparent;color:var(--ink);border:1px solid var(--line);}
 .btn-line:hover{border-color:var(--gold);background:var(--ink);color:var(--paper);}
 .btn-line-inverted{background:transparent;color:#fff;border:1px solid rgba(255,255,255,.55);}
@@ -522,6 +531,9 @@ section{padding:0 5vw;}
 .contact-pop-value{font-family:var(--ff-accent);font-style:italic;font-size:1rem;color:var(--ink);}
 
 .reveal-armed{opacity:0;transform:translateY(22px);}
+/* opacity-only variant — for elements (like .service-card) whose own hover
+   state animates transform; locking an inline transform would break that */
+.reveal-armed-op{opacity:0;}
 
 @media (max-width:1000px){
   .apropos-grid{grid-template-columns:1fr;gap:50px;}
@@ -551,6 +563,8 @@ section{padding:0 5vw;}
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto;}
   .hero-media img.active{animation:none;}
+  .hero-media img{filter:grayscale(.15);transition:none;}
+  .hero-cta .btn-fill{animation:none;}
   .scroll-line i{animation:none;top:0;}
   .cursor-dot,.cursor-ring,.cursor-label{display:none;}
   body.cursor-ready{cursor:auto;}
