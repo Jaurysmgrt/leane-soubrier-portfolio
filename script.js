@@ -331,7 +331,7 @@ try {
   const elPalette = document.getElementById('projectPalette');
   const elPaletteSwatches = document.getElementById('projectPaletteSwatches');
   const hasFlip = window.gsap && window.Flip;
-  const catLabels = { bijoux: 'Bijoux', mode: 'Mode', dessin: 'Dessin', ia: 'Shooting IA', collab: 'Collaboration' };
+  const catLabels = { bijoux: 'Bijoux', 'dessin-technique': 'Dessin technique', silhouette: 'Silhouette', collab: 'Collaboration' };
   let currentProject = 0;
 
   function renderProject(i, skipTextAnim) {
@@ -349,6 +349,7 @@ try {
     elHero.alt = title;
     elIndex.textContent = idx;
     elTag.textContent = cats.join(' · ');
+    elTag.hidden = cats.length === 0;
     elTitle.textContent = title;
     elDesc.textContent = desc;
     elGallery.innerHTML = '';
