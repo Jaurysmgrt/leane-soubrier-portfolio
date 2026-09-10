@@ -548,21 +548,6 @@ try {
   });
 } catch (e) {}
 
-/* contact form — no backend on a static site, so it opens the visitor's
-   own mail app with everything prefilled, straight to Léane's inbox */
-try {
-  const form = document.getElementById('contactForm');
-  form.addEventListener('submit', e => {
-    e.preventDefault();
-    const name = form.name.value.trim();
-    const email = form.email.value.trim();
-    const message = form.message.value.trim();
-    if (!name || !email || !message) return;
-    const subject = encodeURIComponent(`Contact via le portfolio, ${name}`);
-    const body = encodeURIComponent(`${message}\n\n${name}\n${email}`);
-    window.location.href = `mailto:lsoubrier.contact@gmail.com?subject=${subject}&body=${body}`;
-  });
-} catch (e) {}
 
 /* magnetic buttons */
 try {
