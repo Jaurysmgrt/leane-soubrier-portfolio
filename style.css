@@ -168,8 +168,8 @@ section{padding:0 5vw;}
   display:flex;align-items:center;justify-content:center;padding:120px 5vw 100px;
   background:var(--paper);
 }
-.hero-banner-wrap{width:100%;max-width:980px;text-align:center;}
-.hero-banner{width:100%;height:auto;max-width:820px;margin:0 auto;display:block;}
+.hero-banner-wrap{width:100%;max-width:1240px;text-align:center;}
+.hero-banner{width:100%;height:auto;max-width:1100px;margin:0 auto;display:block;}
 .hero-cta{margin-top:12px;display:flex;gap:16px;flex-wrap:wrap;justify-content:center;}
 .btn{
   display:inline-flex;align-items:center;gap:9px;padding:15px 30px;border-radius:60px;
