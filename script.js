@@ -325,7 +325,7 @@ try {
   const elPaletteSwatches = document.getElementById('projectPaletteSwatches');
   const elAiNote = document.getElementById('projectAiNote');
   const hasFlip = window.gsap && window.Flip;
-  const catLabels = { bijoux: 'Bijoux', 'dessin-technique': 'Dessins techniques', silhouette: 'Mode', collab: 'Collaboration', print: 'Prints' };
+  const catLabels = { bijoux: 'Bijoux', 'dessin-technique': 'Dessins techniques', silhouette: 'Mode', collab: 'Collaboration', print: 'Prints', moodboard: 'Moodboard' };
   let currentProject = 0;
 
   function renderProject(i, skipTextAnim) {
