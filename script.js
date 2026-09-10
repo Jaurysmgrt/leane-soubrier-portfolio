@@ -325,7 +325,7 @@ try {
   const elPaletteSwatches = document.getElementById('projectPaletteSwatches');
   const elAiNote = document.getElementById('projectAiNote');
   const hasFlip = window.gsap && window.Flip;
-  const catLabels = { bijoux: 'Bijoux', 'dessin-technique': 'Dessins techniques', silhouette: 'Silhouettes', collab: 'Collaboration' };
+  const catLabels = { bijoux: 'Bijoux', 'dessin-technique': 'Dessins techniques', silhouette: 'Silhouettes', collab: 'Collaboration', print: 'Print' };
   let currentProject = 0;
 
   function renderProject(i, skipTextAnim) {
@@ -449,6 +449,19 @@ try {
     if (!img) return;
     openLightbox(img.currentSrc || img.src, img.alt);
   });
+  /* these images are cloned into the DOM per project, so the custom cursor's
+     one-time querySelectorAll binding (see the cursor block above) never
+     sees them — delegate instead, or the native cursor:zoom-in they rely on
+     stays invisible under body.cursor-ready{cursor:none} with no cue at all */
+  if (isFinePointer) {
+    const ring = document.querySelector('.cursor-ring');
+    document.addEventListener('mouseover', e => {
+      if (e.target.closest('.project-gallery img, .project-hero img')) ring.classList.add('big');
+    });
+    document.addEventListener('mouseout', e => {
+      if (e.target.closest('.project-gallery img, .project-hero img')) ring.classList.remove('big');
+    });
+  }
   lightboxClose.addEventListener('click', closeLightbox);
   lightbox.addEventListener('click', e => { if (e.target === lightbox) closeLightbox(); });
   window.addEventListener('keydown', e => {
