@@ -55,7 +55,6 @@
 
 <div class="mobile-nav" id="mobileNav">
   <a href="#apropos">À propos</a>
-  <a href="#valeurs">Mes valeurs</a>
   <a href="#services">Mes services</a>
   <a href="#creations">Mes créations</a>
   <a href="#contact">Contact</a>
@@ -64,7 +63,6 @@
 <nav class="dot-nav" aria-label="Navigation par section">
   <a href="#hero" data-dot="hero" aria-label="Accueil"><span></span></a>
   <a href="#apropos" data-dot="apropos" aria-label="À propos"><span></span></a>
-  <a href="#valeurs" data-dot="valeurs" aria-label="Mes valeurs"><span></span></a>
   <a href="#services" data-dot="services" aria-label="Mes services"><span></span></a>
   <a href="#creations" data-dot="creations" aria-label="Mes créations"><span></span></a>
   <a href="#contact" data-dot="contact" aria-label="Contact"><span></span></a>
@@ -73,20 +71,11 @@
 <main id="top">
 
   <section class="hero" id="hero">
-    <div class="hero-media" id="heroMedia">
-      <img class="active" src="assets/web/shooting-4.jpg" alt="Shooting IA" loading="eager">
-      <img src="assets/web/ethiquette-1.jpg" alt="The Ethiquette — pièce noire">
-      <img src="assets/web/shooting-3.jpg" alt="Shooting IA">
-    </div>
-    <div class="hero-overlay">
-      <h1 class="hero-name">
-        <span class="line" data-split>Léane</span>
-        <span class="line" data-split>Soubrier</span>
-      </h1>
-      <p class="hero-role" data-reveal>Styliste&nbsp;/&nbsp;DA&nbsp;Freelance</p>
-      <div class="hero-cta" data-reveal>
+    <div class="hero-banner-wrap">
+      <img class="hero-banner" src="assets/web/banniere.png" alt="Léane Soubrier — Styliste / Directrice Artistique freelance — Mode, Bijoux">
+      <div class="hero-cta">
         <a href="#creations" class="btn btn-fill" data-magnetic>Voir mes créations</a>
-        <button type="button" id="heroContactBtn" class="btn btn-line-inverted" data-magnetic aria-haspopup="dialog" aria-expanded="false" aria-controls="contactPop">Me contacter</button>
+        <button type="button" id="heroContactBtn" class="btn btn-line" data-magnetic aria-haspopup="dialog" aria-expanded="false" aria-controls="contactPop">Me contacter</button>
       </div>
     </div>
 
@@ -110,41 +99,21 @@
       <div class="apropos-text">
         <p data-reveal>Passionnée par la mode et l'image, je conçois des identités visuelles fortes, en accord avec l'ADN et les ambitions de chaque marque — de la recherche d'inspiration jusqu'à la direction artistique de campagnes.</p>
         <p data-reveal>Ma double expertise en création et en développement produit me permet d'accompagner les marques sur des projets à la fois créatifs, désirables et stratégiques.</p>
-      </div>
-    </div>
-  </section>
-
-  <section class="section section-valeurs" id="valeurs">
-    <div class="valeurs-top">
-      <div class="section-head">
-        <span class="section-num">02</span>
-        <h2 class="section-title" data-reveal-chars>Mes valeurs</h2>
-      </div>
-      <p class="valeurs-intro" data-reveal>Des identités singulières qui créent une vraie connexion.</p>
-    </div>
-
-    <div class="values-grid">
-      <div class="value-card"><span>01</span>Créativité</div>
-      <div class="value-card"><span>02</span>Rigueur</div>
-      <div class="value-card"><span>03</span>Adaptabilité</div>
-      <div class="value-card"><span>04</span>Qualité</div>
-    </div>
-
-    <div class="vision-block">
-      <span class="vision-label" data-reveal>Direction artistique</span>
-      <div class="vision-tags">
-        <span class="vision-tag" data-reveal>Moderne &amp; dynamique</span>
-        <span class="vision-tag" data-reveal>Adaptée aux tendances</span>
-        <span class="vision-tag" data-reveal>Pensée sur mesure</span>
-        <span class="vision-tag" data-reveal>Optimisée visibilité</span>
-        <span class="vision-tag" data-reveal>Alignée aux objectifs</span>
+        <div class="cv-video-block" data-reveal>
+          <span class="cv-video-label">CV vidéo</span>
+          <div class="cv-video-frame">
+            <video id="cvVideo" playsinline preload="metadata" poster="assets/web/portrait.jpg" controls>
+              <source src="assets/web/cv-video.mp4" type="video/mp4">
+            </video>
+          </div>
+        </div>
       </div>
     </div>
   </section>
 
   <section class="section section-services" id="services">
     <div class="section-head light">
-      <span class="section-num">03</span>
+      <span class="section-num">02</span>
       <h2 class="section-title" data-reveal-chars>Mes services</h2>
     </div>
     <p class="services-intro" data-reveal>Mon approche&nbsp;: je construis des images, des atmosphères et des récits visuels autour de chaque marque, de manière personnalisée.</p>
@@ -188,7 +157,7 @@
 
   <section class="section section-creations" id="creations">
     <div class="section-head">
-      <span class="section-num">04</span>
+      <span class="section-num">03</span>
       <h2 class="section-title" data-reveal-chars>Mes dernières créations</h2>
     </div>
 
@@ -197,7 +166,6 @@
       <button class="filter-btn" data-filter="bijoux">Bijoux</button>
       <button class="filter-btn" data-filter="mode">Mode</button>
       <button class="filter-btn" data-filter="dessin">Dessins</button>
-      <button class="filter-btn" data-filter="ia">Shooting IA</button>
       <button class="filter-btn" data-filter="collab">Collaborations</button>
     </div>
 
@@ -213,15 +181,18 @@
           <div class="creation-thumb">
             <img src="assets/web/bijoux-grid.jpg" alt="Planche de croquis bijoux et accessoires">
           </div>
+          <div class="extra-gallery" hidden>
+            <img src="assets/web/jewelry-sketches.jpg" alt="Recherches de bijoux — croquis et flatlay">
+          </div>
         </div>
       </article>
 
-      <article class="creation-item" data-cat="mode" tabindex="0" role="button" aria-label="Voir le projet — Moodboards et gamme couleurs">
-        <img class="tile-cover" src="assets/web/moodboard-1.jpg" alt="Moodboards et gamme couleurs">
+      <article class="creation-item" data-cat="mode" tabindex="0" role="button" aria-label="Voir le projet — Moodboard et direction artistique">
+        <img class="tile-cover" src="assets/web/moodboard-collection.jpg" alt="Moodboard et direction artistique">
         <span class="tile-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 17L17 7M7 7h10v10"/></svg></span>
         <div class="creation-data" hidden>
           <span class="creation-index">02</span>
-          <h3>Moodboards &amp; gamme couleurs</h3>
+          <h3>Moodboard &amp; direction artistique</h3>
           <p class="full-desc">Chaque moodboard créé est une base de direction artistique, un point de départ visuel qui traduit une intention, une ambiance et une identité stylistique. J'y assemble des références de styles, de matières, de couleurs et de silhouettes afin de construire un univers cohérent et inspirant. Plus qu'un simple collage d'images, le moodboard me permet de poser une vision claire et de guider l'ensemble du processus créatif, du choix des pièces jusqu'à la construction des looks.</p>
           <div class="palette" role="list">
             <button class="swatch" style="--sw:#EFE7DA" data-copy="#EFE7DA" data-name="Draped Silence"><span></span>Draped Silence</button>
@@ -229,28 +200,32 @@
             <button class="swatch" style="--sw:#FFFFFF" data-copy="#FFFFFF" data-name="Pure Marble"><span></span>Pure Marble</button>
             <button class="swatch" style="--sw:#000000" data-copy="#000000" data-name="Charcoal Ink"><span></span>Charcoal Ink</button>
           </div>
-          <div class="creation-thumb thumb-grid grid-3">
-            <img src="assets/web/moodboard-1.jpg" alt="Moodboard mode 1">
-            <img src="assets/web/moodboard-2.jpg" alt="Moodboard mode 2">
-            <img src="assets/web/moodboard-3.jpg" alt="Moodboard mode 3">
+          <div class="creation-thumb">
+            <img src="assets/web/moodboard-collection.jpg" alt="Moodboard — direction artistique">
           </div>
         </div>
       </article>
 
-      <article class="creation-item" data-cat="ia mode" tabindex="0" role="button" aria-label="Voir le projet — Créations shooting IA">
-        <img class="tile-cover" src="assets/web/shooting-4.jpg" alt="Créations shooting IA" style="object-position:center 22%">
+      <article class="creation-item" data-cat="mode" tabindex="0" role="button" aria-label="Voir le projet — Collection, robes du soir">
+        <img class="tile-cover" src="assets/web/collection-08.jpg" alt="Collection — robes du soir" style="object-position:center 12%">
         <span class="tile-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 17L17 7M7 7h10v10"/></svg></span>
         <div class="creation-data" hidden>
           <span class="creation-index">03</span>
-          <h3>Créations shooting IA</h3>
-          <p class="full-desc">Mes créations de shootings IA me permettent d'explorer des univers visuels sans limites, en repoussant les frontières entre mode, imagination et direction artistique. À travers ces images générées et composées, je construis des scènes complètes où chaque détail — lumière, attitude, styling, ambiance — est pensé comme un éditorial de mode à part entière. Cet outil me donne la liberté de tester des concepts, des silhouettes et des atmosphères impossibles à reproduire immédiatement dans la réalité, tout en gardant une exigence esthétique précise.</p>
-          <div class="creation-thumb thumb-grid grid-3 wm-crop">
-            <img class="wm-src" src="assets/web/shooting-2.jpg" alt="Shooting IA 1">
-            <img class="wm-src" src="assets/web/shooting-4.jpg" alt="Shooting IA 2">
-            <img class="wm-src" src="assets/web/shooting-3.jpg" alt="Shooting IA 3">
+          <h3>Collection — Robes du soir</h3>
+          <p class="full-desc">Une collection capsule de robes de soirée pensée autour d'un vocabulaire commun&nbsp;: drapés fluides, dentelle transparente et bijoux dorés sculpturaux en guise d'attaches. Le noir et le blanc se répondent d'une silhouette à l'autre, entre coupes bias, épaules dénudées et fentes marquées, pour une garde-robe de soir cohérente, désirable et résolument éditoriale.</p>
+          <div class="creation-thumb thumb-grid grid-3">
+            <img src="assets/web/collection-08.jpg" alt="Collection robes du soir — look 1">
+            <img src="assets/web/collection-01.jpg" alt="Collection robes du soir — look 2">
+            <img src="assets/web/collection-04.jpg" alt="Collection robes du soir — look 3">
           </div>
           <div class="extra-gallery" hidden>
-            <img class="wm-src" src="assets/web/shooting-5.jpg" alt="Shooting IA 4">
+            <img src="assets/web/collection-02.jpg" alt="Collection robes du soir — look 4">
+            <img src="assets/web/collection-03.jpg" alt="Collection robes du soir — look 5">
+            <img src="assets/web/collection-05.jpg" alt="Collection robes du soir — look 6">
+            <img src="assets/web/collection-06.jpg" alt="Collection robes du soir — look 7">
+            <img src="assets/web/collection-07.jpg" alt="Collection robes du soir — look 8">
+            <img src="assets/web/collection-09.jpg" alt="Collection robes du soir — look 9">
+            <img src="assets/web/collection-10.jpg" alt="Collection robes du soir — look 10">
           </div>
         </div>
       </article>
@@ -273,20 +248,19 @@
         </div>
       </article>
 
-      <article class="creation-item" data-cat="dessin mode" tabindex="0" role="button" aria-label="Voir le projet — Dessins techniques et pyramides de produits">
-        <img class="tile-cover" src="assets/web/pyramide.jpg" alt="Dessins techniques et pyramides de produits">
+      <article class="creation-item" data-cat="dessin mode" tabindex="0" role="button" aria-label="Voir le projet — Recherche et construction de collection">
+        <img class="tile-cover" src="assets/web/croquis-lineup.jpg" alt="Recherche et construction de collection">
         <span class="tile-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 17L17 7M7 7h10v10"/></svg></span>
         <div class="creation-data" hidden>
           <span class="creation-index">05</span>
-          <h3>Dessins techniques &amp; pyramides de produits</h3>
-          <p class="full-desc">Dans le cadre du développement de mes collections, je réalise des pyramides de produits qui servent par la suite à estimer la cohérence des pièces ainsi que leur potentiel lors de l'achat. Cette étape permet de catégoriser les pièces &amp; de leur attribuer une section en fonction de leur matière, couleur, forme ou encore utilisation.</p>
-          <div class="creation-thumb thumb-grid grid-2">
-            <img src="assets/web/croquis-figures-1.jpg" alt="Croquis techniques — planche 1">
-            <img src="assets/web/pyramide.jpg" alt="Pyramide de produits">
+          <h3>Recherche &amp; construction de collection</h3>
+          <p class="full-desc">En amont de chaque shooting, je construis la collection par le dessin&nbsp;: une ligne de silhouettes qui pose l'équilibre de l'ensemble, puis des planches techniques qui détaillent la construction de chaque pièce — drapés, volumes, fermetures. Le plan de collection vient ensuite structurer l'offre en trois niveaux — Basics, Iconiques, Pièces créateur — avec matières et déclinaisons couleur, pour penser chaque silhouette aussi bien du point de vue créatif que commercial.</p>
+          <div class="creation-thumb">
+            <img src="assets/web/croquis-lineup.jpg" alt="Ligne de silhouettes — recherche de collection">
           </div>
           <div class="extra-gallery" hidden>
-            <img src="assets/web/croquis-figures-2.jpg" alt="Croquis techniques — planche 2">
-            <img src="assets/web/fiche-technique.jpg" alt="Fiche technique">
+            <img src="assets/web/techflats-collection.jpg" alt="Planches techniques — construction des pièces">
+            <img src="assets/web/plan-collection.jpg" alt="Plan de collection — Basics, Iconiques, Pièces créateur">
           </div>
         </div>
       </article>
@@ -327,7 +301,7 @@
   <section class="section section-contact" id="contact">
     <div class="contact-grid">
       <div class="contact-statement">
-        <span class="section-num">05 — Contact</span>
+        <span class="section-num">04 — Contact</span>
         <h2 class="contact-heading" data-reveal>Travaillons<br>ensemble.</h2>
         <p data-reveal>Disponible pour des collaborations, projets freelance et directions artistiques — en France et à l'international.</p>
       </div>

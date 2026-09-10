@@ -11,7 +11,7 @@ try { sessionStorage.setItem('ls-visited', '1'); } catch (e) {}
    the instant the network delivers them */
 try {
   document.querySelectorAll('main img').forEach(img => {
-    if (img.closest('#heroMedia')) return;
+    if (img.closest('.hero')) return;
     img.classList.add('fade-img');
     const markLoaded = () => img.classList.add('is-loaded');
     if (img.complete && img.naturalWidth > 0) markLoaded();
@@ -26,13 +26,9 @@ try {
 /* hero safety net — this is the first thing anyone sees, so it gets its
    own short, tight backstop instead of waiting on the global one below */
 function revealHero(){
-  document.querySelectorAll('.hero-name .line span').forEach(el => {
-    el.style.opacity = '';
-    el.style.transform = '';
-  });
-  ['.hero-role', '.hero-cta', '.hero-scroll'].forEach(sel => {
+  ['.hero-banner', '.hero-cta', '.hero-scroll'].forEach(sel => {
     const el = document.querySelector(sel);
-    if (el) { el.style.opacity = ''; el.style.transform = ''; }
+    if (el) { el.classList.remove('reveal-armed-op'); el.style.opacity = ''; el.style.transform = ''; }
   });
 }
 window.addEventListener('load', () => setTimeout(revealHero, 2600));
@@ -47,7 +43,6 @@ function revealEverything(){
   revealHero();
   document.querySelectorAll('.word-mask .word').forEach(el => { el.style.transform = ''; });
   document.querySelector('.site-header')?.classList.add('ready');
-  document.getElementById('heroMedia')?.classList.add('bloomed');
   document.getElementById('preloader')?.remove();
   document.body.style.overflow = '';
 }
@@ -59,7 +54,6 @@ window.addEventListener('load', () => setTimeout(revealEverything, 5500));
 if (reduceMotion || isRepeatVisit) {
   document.getElementById('preloader')?.remove();
   document.querySelector('.site-header')?.classList.add('ready');
-  document.getElementById('heroMedia')?.classList.add('bloomed');
 } else {
   try {
     document.body.style.overflow = 'hidden';
@@ -75,7 +69,6 @@ if (reduceMotion || isRepeatVisit) {
       .to('.preloader-role', { opacity: 1, duration: .7, ease: 'sine.inOut' }, '-=.5')
       .to('.site-header', { opacity: 1, duration: .7, ease: 'sine.inOut' }, '-=.3')
       .to('.preloader-inner', { opacity: 0, duration: .6, ease: 'sine.inOut' }, '+=.55')
-      .add(() => document.getElementById('heroMedia')?.classList.add('bloomed'), '-=.5')
       .to('#preloader', { autoAlpha: 0, duration: .6, ease: 'sine.inOut' }, '-=.3');
   } catch (e) { revealEverything(); }
 }
@@ -126,36 +119,6 @@ try {
 
 /* header stays fixed and visible at all times — no hide-on-scroll */
 
-/* hero slideshow */
-try {
-  const heroImgs = document.querySelectorAll('#heroMedia img');
-  if (heroImgs.length > 1) {
-    let heroIdx = 0;
-    setInterval(() => {
-      heroImgs[heroIdx].classList.remove('active');
-      heroIdx = (heroIdx + 1) % heroImgs.length;
-      heroImgs[heroIdx].classList.add('active');
-    }, 5500);
-  }
-} catch (e) {}
-
-/* hero — subtle cursor-driven depth, desktop only */
-if (isFinePointer && !reduceMotion) {
-  try {
-    const heroMedia = document.getElementById('heroMedia');
-    const hero = document.getElementById('hero');
-    hero.addEventListener('mousemove', e => {
-      const r = hero.getBoundingClientRect();
-      const px = (e.clientX - r.left) / r.width - .5;
-      const py = (e.clientY - r.top) / r.height - .5;
-      gsap.to(heroMedia, { x: px * -18, y: py * -12, duration: 1, ease: 'power2.out' });
-    });
-    hero.addEventListener('mouseleave', () => {
-      gsap.to(heroMedia, { x: 0, y: 0, duration: 1, ease: 'power3.out' });
-    });
-  } catch (e) {}
-}
-
 /* mobile nav */
 try {
   const burger = document.getElementById('burger');
@@ -194,23 +157,16 @@ if (window.gsap && window.Flip) {
   gsap.registerPlugin(Flip);
 }
 
-/* split hero name into chars */
+/* hero banner + CTAs settle in on load */
 try {
-  document.querySelectorAll('.hero-name .line').forEach(line => {
-    const text = line.textContent;
-    line.innerHTML = text.split('').map(c => `<span>${c}</span>`).join('');
-  });
-  gsap.set('.hero-name .line span', { yPercent: 120, opacity: 0 });
-  gsap.to('.hero-name .line span', {
-    yPercent: 0, opacity: 1, duration: 1, ease: 'power4.out',
-    stagger: .035, delay: 1.4
-  });
-  gsap.set('.hero-role, .hero-cta', { opacity: 0, y: 16 });
-  gsap.to('.hero-role, .hero-cta', {
-    opacity: 1, y: 0, duration: 1, ease: 'power3.out', stagger: .12, delay: 1.7
-  });
-  gsap.set('.hero-scroll', { opacity: 0 });
-  gsap.to('.hero-scroll', { opacity: 1, duration: 1, delay: 2.2 });
+  const banner = document.querySelector('.hero-banner');
+  const cta = document.querySelector('.hero-cta');
+  const scroll = document.querySelector('.hero-scroll');
+  gsap.set([banner, cta], { opacity: 0, y: 14 });
+  gsap.to(banner, { opacity: 1, y: 0, duration: 1.1, ease: 'power3.out', delay: .3 });
+  gsap.to(cta, { opacity: 1, y: 0, duration: 1, ease: 'power3.out', delay: .8 });
+  gsap.set(scroll, { opacity: 0 });
+  gsap.to(scroll, { opacity: 1, duration: 1, delay: 1.5 });
 } catch (e) {}
 
 /* generic reveal — pure opacity, tied to scroll position (no slide) */
@@ -289,33 +245,6 @@ try {
     yPercent: -10, ease: 'none',
     scrollTrigger: { trigger: '.apropos-visual', start: 'top bottom', end: 'bottom top', scrub: true }
   });
-} catch (e) {}
-
-/* hero — gains depth as it scrolls away: slow zoom, sinks into shadow */
-try {
-  gsap.to('#heroMedia', {
-    scale: 1.18, opacity: .35, ease: 'none',
-    scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true }
-  });
-} catch (e) {}
-
-/* values grid — scroll-scrubbed sequential reveal */
-try {
-  const cards = gsap.utils.toArray('.value-card');
-  if (cards.length) {
-    cards.forEach(c => { c.classList.add('reveal-armed'); c.style.transform = 'scale(.82)'; });
-    ScrollTrigger.create({
-      trigger: '.values-grid', start: 'top 78%', end: 'top 15%', scrub: .6,
-      onUpdate: self => {
-        const p = self.progress;
-        cards.forEach((c, i) => {
-          const cp = Math.min(1, Math.max(0, (p - i * .14) / .4));
-          c.style.opacity = cp;
-          c.style.transform = `scale(${.82 + cp * .18})`;
-        });
-      }
-    });
-  }
 } catch (e) {}
 
 /* services tilt */
