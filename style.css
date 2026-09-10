@@ -45,8 +45,11 @@ body{
   overflow-x:hidden;
 }
 /* cursor:none only applies once the JS cursor is confirmed running —
-   if the script fails to load, the real system cursor stays visible */
-body.cursor-ready{cursor:none;}
+   if the script fails to load, the real system cursor stays visible.
+   Scoped to wide windows only — see the matching hide rule below for why. */
+@media (min-width:1001px){
+  body.cursor-ready{cursor:none;}
+}
 
 :focus-visible{outline:2px solid var(--focus);outline-offset:3px;border-radius:2px;}
 .dot-nav a:focus-visible::before{opacity:1;}
@@ -86,9 +89,11 @@ p{margin:0;}
 .cursor-label.show{transform:translate(-50%,-50%) scale(1);opacity:1;}
 .cursor-label span{font-family:var(--ff-sans);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;}
 
-/* matches the JS pointer:fine check exactly — a mouse in a narrow window
-   still gets a visible cursor; only touch/coarse pointers fall back */
-@media (hover:none), (pointer:coarse){
+/* below the nav breakpoint the layout switches to its compact/mobile
+   treatment (burger nav, stacked hero) — the custom cursor stays hidden
+   there too, even with a real mouse, since a big ring/label reads as
+   glitchy floating next to a layout that's already sized for touch */
+@media (hover:none), (pointer:coarse), (max-width:1000px){
   .cursor-dot,.cursor-ring,.cursor-label{display:none;}
   body{cursor:auto;}
 }
