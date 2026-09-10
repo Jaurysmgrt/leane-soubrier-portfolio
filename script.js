@@ -511,6 +511,29 @@ try {
   window.addEventListener('resize', () => { if (pop.classList.contains('open')) positionPop(); });
 } catch (e) {}
 
+/* legal modal — opened from the footer's "Mentions légales" link */
+try {
+  const legalBtn = document.getElementById('legalOpenBtn');
+  const legalModal = document.getElementById('legalModal');
+  const legalClose = document.getElementById('legalCloseBtn');
+  function openLegal(){
+    legalModal.classList.add('open');
+    legalModal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeLegal(){
+    legalModal.classList.remove('open');
+    legalModal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  }
+  legalBtn.addEventListener('click', openLegal);
+  legalClose.addEventListener('click', closeLegal);
+  legalModal.addEventListener('click', e => { if (e.target === legalModal) closeLegal(); });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && legalModal.classList.contains('open')) closeLegal();
+  });
+} catch (e) {}
+
 /* contact form — no backend on a static site, so it opens the visitor's
    own mail app with everything prefilled, straight to Léane's inbox */
 try {
