@@ -341,6 +341,7 @@ try {
 
     elHero.src = cover ? (cover.currentSrc || cover.src) : (imgs[0] ? (imgs[0].currentSrc || imgs[0].src) : '');
     elHero.alt = title;
+    elHero.classList.toggle('label-cover', elHero.src.includes('/label-'));
     elIndex.textContent = idx;
     elTag.textContent = cats.join(' · ');
     elTag.hidden = cats.length === 0;
