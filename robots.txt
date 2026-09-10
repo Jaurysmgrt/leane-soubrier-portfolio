@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://jaurysmgrt.github.io/leane-soubrier-portfolio/sitemap.xml
