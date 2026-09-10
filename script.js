@@ -117,7 +117,15 @@ try {
   }, { passive: true });
 } catch (e) {}
 
-/* header stays fixed and visible at all times — no hide-on-scroll */
+/* header stays fixed and visible at all times — no hide-on-scroll.
+   Past the hero it gets a solid backdrop instead of the difference-blend
+   look, so it never visually merges with a heading scrolling underneath it */
+try {
+  const header = document.querySelector('.site-header');
+  const setScrolled = () => header.classList.toggle('scrolled', window.scrollY > 80);
+  window.addEventListener('scroll', setScrolled, { passive: true });
+  setScrolled();
+} catch (e) {}
 
 /* mobile nav */
 try {
@@ -244,21 +252,6 @@ try {
   gsap.to('.portrait-frame img', {
     yPercent: -10, ease: 'none',
     scrollTrigger: { trigger: '.apropos-visual', start: 'top bottom', end: 'bottom top', scrub: true }
-  });
-} catch (e) {}
-
-/* services tilt */
-try {
-  document.querySelectorAll('[data-tilt]').forEach(card => {
-    card.addEventListener('mousemove', e => {
-      const r = card.getBoundingClientRect();
-      const px = (e.clientX - r.left) / r.width - .5;
-      const py = (e.clientY - r.top) / r.height - .5;
-      gsap.to(card, { rotateY: px * 6, rotateX: -py * 6, duration: .4, ease: 'power2.out', transformPerspective: 800 });
-    });
-    card.addEventListener('mouseleave', () => {
-      gsap.to(card, { rotateX: 0, rotateY: 0, duration: .6, ease: 'power3.out' });
-    });
   });
 } catch (e) {}
 
@@ -498,20 +491,6 @@ try {
   });
 } catch (e) {}
 
-/* contact section — ambient light that follows the cursor, desktop only */
-if (isFinePointer && !reduceMotion) {
-  try {
-    const contactSection = document.getElementById('contact');
-    contactSection.addEventListener('mousemove', e => {
-      const r = contactSection.getBoundingClientRect();
-      contactSection.style.setProperty('--gx', (e.clientX - r.left) + 'px');
-      contactSection.style.setProperty('--gy', (e.clientY - r.top) + 'px');
-      contactSection.classList.add('glow-on');
-    });
-    contactSection.addEventListener('mouseleave', () => contactSection.classList.remove('glow-on'));
-  } catch (e) {}
-}
-
 /* magnetic buttons */
 try {
   document.querySelectorAll('[data-magnetic]').forEach(el => {
@@ -537,34 +516,6 @@ try {
       scrollTrigger: { trigger: box, start: 'top 98%', end: 'top 60%', scrub: .5 }
     });
   });
-} catch (e) {}
-
-/* footer marquee — drifts on its own, surges forward when you scroll,
-   the way a heavy object picks up momentum rather than just looping on rails */
-try {
-  const track = document.querySelector('.footer-marquee .marquee-track');
-  if (track) {
-    if (reduceMotion) {
-      track.style.transform = 'translateX(0)';
-    } else {
-      let x = 0;
-      let velocity = 0;
-      let lastY = window.scrollY;
-      let loopWidth = track.scrollWidth / 2;
-      window.addEventListener('resize', () => { loopWidth = track.scrollWidth / 2; });
-      window.addEventListener('scroll', () => {
-        velocity += (window.scrollY - lastY) * 0.6;
-        lastY = window.scrollY;
-      }, { passive: true });
-      (function tick(){
-        velocity *= 0.92;
-        x -= 1.3 + Math.min(Math.abs(velocity), 14) * 0.2;
-        if (loopWidth > 0 && x <= -loopWidth) x += loopWidth;
-        track.style.transform = `translateX(${x}px)`;
-        requestAnimationFrame(tick);
-      })();
-    }
-  }
 } catch (e) {}
 
 try { ScrollTrigger.refresh(); } catch (e) {}
