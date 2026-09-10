@@ -1,3 +1,19 @@
+@font-face{
+  font-family:'Croissant';
+  src:url('assets/fonts/Croissant.otf') format('opentype');
+  font-weight:400;font-style:normal;font-display:swap;
+}
+@font-face{
+  font-family:'Rosatlinde';
+  src:url('assets/fonts/Rosatlinde.ttf') format('truetype');
+  font-weight:400;font-style:normal;font-display:swap;
+}
+@font-face{
+  font-family:'Rosatlinde';
+  src:url('assets/fonts/Rosatlinde-Italic.ttf') format('truetype');
+  font-weight:400;font-style:italic;font-display:swap;
+}
+
 :root{
   --cream:#F0F0F0;
   --paper:#FFFFFF;
@@ -6,8 +22,9 @@
   --wine:#000000;
   --focus:#8c8c8c;
   --line:rgba(0,0,0,.14);
-  --ff-accent:'Instrument Sans', sans-serif;
-  --ff-sans:'Instrument Sans', sans-serif;
+  --ff-display:'Playfair Display', serif;
+  --ff-accent:'Playfair Display', serif;
+  --ff-sans:'Montserrat', sans-serif;
   --ease:cubic-bezier(.16,.84,.44,1);
 }
 
@@ -33,7 +50,9 @@ img.fade-img{opacity:0;transition:opacity .7s var(--ease);}
 img.fade-img.is-loaded{opacity:1;}
 a{color:inherit;text-decoration:none;}
 ul{margin:0;padding:0;list-style:none;}
-h1,h2,h3{margin:0;font-family:var(--ff-sans);font-weight:500;letter-spacing:-.01em;}
+h1,h2,h3{margin:0;letter-spacing:-.01em;}
+h1,h2{font-family:var(--ff-display);font-weight:400;}
+h3{font-family:var(--ff-accent);font-weight:400;}
 p{margin:0;}
 
 ::selection{background:var(--ink);color:var(--paper);}
@@ -107,7 +126,7 @@ p{margin:0;}
   padding-top:18px;padding-bottom:18px;
   box-shadow:0 1px 0 rgba(255,255,255,.08);
 }
-.logo{font-family:var(--ff-accent);font-size:1rem;color:#fff;letter-spacing:.08em;text-align:center;}
+.logo{font-family:var(--ff-sans);font-size:1rem;color:#fff;letter-spacing:.08em;text-align:center;}
 .header-contact{
   justify-self:end;color:#fff;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;
   position:relative;padding-bottom:3px;
@@ -206,6 +225,19 @@ section{padding:0 5vw;}
 .apropos-caption{display:block;margin-top:14px;font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-soft);}
 .apropos-text p{font-size:clamp(1rem,1.6vw,1.2rem);line-height:1.75;margin-bottom:28px;color:var(--ink-soft);}
 .apropos-text p:last-child{margin-bottom:0;}
+
+.apropos-status{
+  margin-top:32px;padding:24px 28px;background:var(--cream);border-radius:6px;
+  box-shadow:0 1px 2px rgba(12,12,12,.05);
+}
+.apropos-status-label{display:block;font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:10px;}
+.apropos-status p{font-size:.95rem;line-height:1.6;color:var(--ink-soft);margin:0;}
+.apropos-tags{margin-top:28px;display:flex;flex-wrap:wrap;gap:10px;}
+.apropos-tag{
+  border:1px solid var(--line);border-radius:40px;padding:8px 18px;
+  font-size:.78rem;letter-spacing:.04em;color:var(--ink-soft);transition:border-color .3s,color .3s;
+}
+.apropos-tag:hover{border-color:var(--ink);color:var(--ink);}
 
 .cv-video-block{margin-top:36px;}
 .cv-video-label{
