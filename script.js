@@ -323,7 +323,6 @@ try {
   const elTag = document.getElementById('projectTag');
   const elPalette = document.getElementById('projectPalette');
   const elPaletteSwatches = document.getElementById('projectPaletteSwatches');
-  const elAiNote = document.getElementById('projectAiNote');
   const hasFlip = window.gsap && window.Flip;
   const catLabels = { bijoux: 'Bijoux', 'dessin-technique': 'Dessins techniques', silhouette: 'Mode', collab: 'Collaboration', print: 'Prints', moodboard: 'Moodboard' };
   let currentProject = 0;
@@ -347,7 +346,6 @@ try {
     elTag.hidden = cats.length === 0;
     elTitle.textContent = title;
     elDesc.textContent = desc;
-    elAiNote.hidden = item.dataset.ai !== 'true';
     elGallery.innerHTML = '';
     imgs.forEach(img => {
       const clone = document.createElement('img');
