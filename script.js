@@ -431,12 +431,14 @@ try {
   const lightboxClose = document.getElementById('lightboxClose');
 
   function openLightbox(src, alt){
+    lightboxImg.classList.remove('errored');
     lightboxImg.src = src;
     lightboxImg.alt = alt || '';
     lightbox.classList.add('open');
     lightbox.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden';
   }
+  lightboxImg.addEventListener('error', () => { lightboxImg.classList.add('errored'); });
   function closeLightbox(){
     lightbox.classList.remove('open');
     lightbox.setAttribute('aria-hidden', 'true');

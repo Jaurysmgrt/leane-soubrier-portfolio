@@ -281,14 +281,9 @@ section{padding:0 5vw;}
 .service-card:hover h3{transform:translateX(4px);}
 .service-card li{
   padding:13px 0;border-top:1px solid var(--line);font-size:.93rem;color:var(--ink-soft);
-  position:relative;padding-left:18px;transition:padding-left .4s var(--ease),color .4s var(--ease);
+  position:relative;transition:padding-left .4s var(--ease),color .4s var(--ease);
 }
-.service-card li::before{
-  content:'';position:absolute;left:0;top:21px;width:6px;height:1px;background:var(--ink);
-  transition:width .4s var(--ease);
-}
-.service-card:hover li{padding-left:24px;color:var(--ink);}
-.service-card:hover li::before{width:12px;}
+.service-card:hover li{padding-left:6px;color:var(--ink);}
 @media (max-width:1000px){
   .service-card{padding-top:34px;}
   .service-index{font-size:2.4rem;}
@@ -537,6 +532,9 @@ section{padding:0 5vw;}
   border-radius:2px;transform:scale(.96);transition:transform .35s var(--ease);
 }
 .lightbox.open img{transform:scale(1);}
+.lightbox img.errored{display:none;}
+.lightbox img.errored ~ .lightbox-error{display:block;}
+.lightbox-error{display:none;color:var(--paper);font-size:.85rem;letter-spacing:.05em;}
 .lightbox-close{
   position:absolute;top:24px;right:24px;width:44px;height:44px;border-radius:50%;
   background:transparent;border:1px solid rgba(255,255,255,.4);color:var(--paper);
