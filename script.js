@@ -286,7 +286,14 @@ try {
       const f = btn.dataset.filter;
 
       if (hasFlip && !reduceMotion) {
+        const grid = document.getElementById('creationsGrid');
         const state = Flip.getState(creationItems);
+        // Flip's absolute:true pulls every tile out of flow for the
+        // duration of the animation, so the grid itself has nothing left
+        // to size against and collapses to 0 height until it's over —
+        // pin it to its current height for the animation so the page
+        // below doesn't jump up and snap back around the moving tiles.
+        grid.style.minHeight = grid.getBoundingClientRect().height + 'px';
         creationItems.forEach(item => {
           const cats = (item.dataset.cat || '').split(' ');
           const show = f === 'all' || cats.includes(f);
@@ -295,7 +302,8 @@ try {
         Flip.from(state, {
           duration: .6, ease: 'power3.out', stagger: .035, absolute: true,
           onEnter: els => gsap.fromTo(els, { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: .5, ease: 'power2.out' }),
-          onLeave: els => gsap.to(els, { opacity: 0, y: 16, duration: .3, ease: 'power2.in' })
+          onLeave: els => gsap.to(els, { opacity: 0, y: 16, duration: .3, ease: 'power2.in' }),
+          onComplete: () => { grid.style.minHeight = ''; }
         });
       } else {
         creationItems.forEach(item => {

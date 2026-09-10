@@ -183,6 +183,12 @@ section{padding:0 5vw;}
   display:flex;align-items:center;justify-content:center;padding:120px 5vw 80px;
   background:var(--paper);
 }
+/* on short/wide viewports (laptops with a limited browser height) the
+   centered content can grow tall enough to butt up against the absolutely
+   positioned scroll cue at the bottom — give it more headroom there */
+@media (max-height:820px){
+  .hero{padding-top:90px;padding-bottom:120px;}
+}
 /* faint oversized monogram filling the empty space around the centered
    content on tall viewports — purely decorative texture, stays out of the
    way of everything else (no pointer events, sits behind the real content) */
