@@ -189,7 +189,7 @@ section{padding:0 5vw;}
    itself has generous built-in padding below "MODE / BIJOUX". The banner
    scales with viewport width, so the pull must scale with it too (a fixed
    px value overshoots on small screens and undershoots on huge ones). */
-.hero-cta{margin-top:clamp(-60px,-5.5vw,-16px);display:flex;gap:16px;flex-wrap:wrap;justify-content:center;}
+.hero-cta{margin-top:clamp(8px,1.6vw,20px);display:flex;gap:16px;flex-wrap:wrap;justify-content:center;}
 .btn{
   display:inline-flex;align-items:center;gap:9px;padding:15px 30px;border-radius:60px;
   font-family:var(--ff-sans);font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;
