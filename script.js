@@ -265,7 +265,7 @@ try {
     if (!sw) return;
     const hex = sw.dataset.copy;
     navigator.clipboard?.writeText(hex).catch(() => {});
-    toast.textContent = `${sw.dataset.name} — ${hex} copié ✓`;
+    toast.textContent = `${sw.dataset.name} (${hex}) copié ✓`;
     toast.classList.add('show');
     clearTimeout(toast._t);
     toast._t = setTimeout(() => toast.classList.remove('show'), 1800);
@@ -521,8 +521,8 @@ try {
     const email = form.email.value.trim();
     const message = form.message.value.trim();
     if (!name || !email || !message) return;
-    const subject = encodeURIComponent(`Contact via le portfolio — ${name}`);
-    const body = encodeURIComponent(`${message}\n\n—\n${name}\n${email}`);
+    const subject = encodeURIComponent(`Contact via le portfolio, ${name}`);
+    const body = encodeURIComponent(`${message}\n\n${name}\n${email}`);
     window.location.href = `mailto:lsoubrier.contact@gmail.com?subject=${subject}&body=${body}`;
   });
 } catch (e) {}
