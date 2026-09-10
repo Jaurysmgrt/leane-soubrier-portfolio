@@ -323,6 +323,7 @@ try {
   const elTag = document.getElementById('projectTag');
   const elPalette = document.getElementById('projectPalette');
   const elPaletteSwatches = document.getElementById('projectPaletteSwatches');
+  const elAiNote = document.getElementById('projectAiNote');
   const hasFlip = window.gsap && window.Flip;
   const catLabels = { bijoux: 'Bijoux', 'dessin-technique': 'Dessins techniques', silhouette: 'Silhouettes', collab: 'Collaboration' };
   let currentProject = 0;
@@ -345,12 +346,14 @@ try {
     elTag.hidden = cats.length === 0;
     elTitle.textContent = title;
     elDesc.textContent = desc;
+    elAiNote.hidden = item.dataset.ai !== 'true';
     elGallery.innerHTML = '';
     imgs.forEach(img => {
       const clone = document.createElement('img');
       clone.src = img.currentSrc || img.src;
       clone.alt = img.alt || title;
       if (img.classList.contains('wm-src')) clone.className = 'wm-src';
+      if (img.classList.contains('wide-src')) clone.className = 'wide-src';
       elGallery.appendChild(clone);
     });
     const paletteSource = item.querySelector('.palette');
@@ -414,9 +417,40 @@ try {
   document.getElementById('projectNext')?.addEventListener('click', () => renderProject((currentProject + 1) % items.length));
   window.addEventListener('keydown', (e) => {
     if (!page.classList.contains('open')) return;
+    if (document.getElementById('lightbox')?.classList.contains('open')) return;
     if (e.key === 'Escape') closeProject();
     if (e.key === 'ArrowRight') renderProject((currentProject + 1) % items.length);
     if (e.key === 'ArrowLeft') renderProject((currentProject - 1 + items.length) % items.length);
+  });
+} catch (e) {}
+
+/* lightbox — click any gallery/hero image to see it full size, uncropped */
+try {
+  const lightbox = document.getElementById('lightbox');
+  const lightboxImg = document.getElementById('lightboxImg');
+  const lightboxClose = document.getElementById('lightboxClose');
+
+  function openLightbox(src, alt){
+    lightboxImg.src = src;
+    lightboxImg.alt = alt || '';
+    lightbox.classList.add('open');
+    lightbox.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeLightbox(){
+    lightbox.classList.remove('open');
+    lightbox.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  }
+  document.addEventListener('click', e => {
+    const img = e.target.closest('.project-gallery img, .project-hero img');
+    if (!img) return;
+    openLightbox(img.currentSrc || img.src, img.alt);
+  });
+  lightboxClose.addEventListener('click', closeLightbox);
+  lightbox.addEventListener('click', e => { if (e.target === lightbox) closeLightbox(); });
+  window.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && lightbox.classList.contains('open')) closeLightbox();
   });
 } catch (e) {}
 

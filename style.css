@@ -338,6 +338,18 @@ section{padding:0 5vw;}
 .creation-item:hover .tile-icon,.creation-item:focus-visible .tile-icon{opacity:1;transform:translate(0,0) scale(1);}
 .creation-item:hover .tile-icon{background:var(--paper);border-color:var(--paper);color:var(--ink);}
 
+/* discloses AI-generated visuals at a glance, before opening the project */
+.tile-ai-badge{
+  position:absolute;left:16px;top:16px;z-index:1;
+  background:rgba(12,12,12,.55);color:var(--paper);
+  font-family:var(--ff-sans);font-size:.65rem;letter-spacing:.12em;
+  padding:5px 10px;border-radius:40px;backdrop-filter:blur(6px);
+}
+.project-ai-note{
+  font-size:.85rem;font-style:italic;color:var(--ink-soft);
+  max-width:640px;margin:-8px 0 24px;
+}
+
 /* .thumb-grid / .wm-crop: sizing rules for the multi-image markup kept
    inside each tile's hidden .creation-data (read by JS for the detail
    view's gallery). Never rendered directly, so no display CSS needed. */
@@ -417,6 +429,13 @@ section{padding:0 5vw;}
 .project-gallery img:only-child,
 .project-gallery img:first-child:nth-last-child(odd):not(:only-child){grid-column:1/-1;aspect-ratio:16/9;}
 .project-gallery img.wm-src{object-position:center 28%;transform:scale(1.14);}
+/* dense reference documents (technical flats, collection plans) lose too
+   much content when force-cropped into a square — show them uncropped,
+   full width, at their own natural proportions instead */
+.project-gallery img.wide-src{
+  grid-column:1/-1;aspect-ratio:auto;height:auto;object-fit:contain;
+  background:var(--cream);
+}
 @media (max-width:700px){
   .project-gallery{grid-template-columns:1fr;}
   .project-gallery img:first-child:nth-last-child(odd):not(:only-child){grid-column:auto;}
@@ -505,6 +524,27 @@ section{padding:0 5vw;}
   transition:opacity .3s,transform .3s;
 }
 .toast.show{opacity:1;transform:translate(-50%,0);}
+
+/* lightbox — click any gallery image to see it full size, uncropped */
+.lightbox{
+  position:fixed;inset:0;z-index:9000;background:rgba(12,12,12,.94);
+  display:flex;align-items:center;justify-content:center;padding:6vh 5vw;
+  opacity:0;visibility:hidden;transition:opacity .35s var(--ease),visibility 0s linear .35s;
+}
+.lightbox.open{opacity:1;visibility:visible;transition:opacity .35s var(--ease),visibility 0s;}
+.lightbox img{
+  max-width:100%;max-height:88vh;width:auto;height:auto;display:block;
+  border-radius:2px;transform:scale(.96);transition:transform .35s var(--ease);
+}
+.lightbox.open img{transform:scale(1);}
+.lightbox-close{
+  position:absolute;top:24px;right:24px;width:44px;height:44px;border-radius:50%;
+  background:transparent;border:1px solid rgba(255,255,255,.4);color:var(--paper);
+  display:flex;align-items:center;justify-content:center;cursor:pointer;
+  transition:border-color .3s,background .3s;
+}
+.lightbox-close:hover{border-color:var(--paper);background:rgba(255,255,255,.08);}
+.project-gallery img,.project-hero img{cursor:zoom-in;}
 
 /* contact popover — a small card of every way to reach her, positioned
    next to whichever button opened it (top set dynamically in JS) */
