@@ -287,6 +287,16 @@ try {
 
       if (hasFlip && !reduceMotion) {
         const grid = document.getElementById('creationsGrid');
+        // clicking a second filter before the previous transition finishes
+        // used to corrupt every tile permanently: Flip's in-flight tween
+        // holds explicit width/height/position values mid-interpolation,
+        // and starting a fresh Flip.getState() on top of that captured
+        // those half-collapsed values as the new "before" state — so every
+        // click after made things smaller until tiles were stuck at 0×0.
+        // Killing the previous tween and resetting to its resolved layout
+        // first means every click always starts from a clean, real state.
+        gsap.killTweensOf(creationItems);
+        gsap.set(creationItems, { clearProps: 'position,width,height,top,left,maxWidth,maxHeight,minWidth,minHeight,transform,translate,rotate,scale,padding,opacity' });
         const state = Flip.getState(creationItems);
         // Flip's absolute:true pulls every tile out of flow for the
         // duration of the animation, so the grid itself has nothing left
