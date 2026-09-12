@@ -274,8 +274,9 @@ try {
 
 /* creation filters — same cascade reveal as sur jaurysmgrt.github.io/Portfolio :
    chaque tuile qui apparaît fait un fondu + léger glissement + démasquage,
-   une par une (léger décalage). Celles qui disparaissent s'effacent net,
-   la grille ne déplace jamais rien (pas de Flip / position absolue). */
+   une par une (léger décalage). Celles qui disparaissent font un petit
+   fondu de sortie plutôt qu'une coupure sèche. La grille ne déplace
+   jamais rien (pas de Flip / position absolue). */
 try {
   const filterBtns = document.querySelectorAll('.filter-btn');
   const creationItems = Array.from(document.querySelectorAll('.creation-item'));
@@ -298,11 +299,19 @@ try {
     });
   }, { threshold: .1 });
 
+  const hideTimers = new WeakMap();
+
   function applyFilter(f, animate) {
     let n = 0;
     creationItems.forEach(item => {
       const cats = (item.dataset.cat || '').split(' ');
       const show = f === 'all' || cats.includes(f);
+
+      // A new decision on this item always cancels a fade-out still in
+      // flight from a previous click, so rapid re-filtering can't leave
+      // it stuck mid-fade or hidden a beat after it should be visible again.
+      const pendingHide = hideTimers.get(item);
+      if (pendingHide) { clearTimeout(pendingHide); hideTimers.delete(item); item.classList.remove('leaving'); }
 
       if (show) {
         item.classList.remove('is-hidden');
@@ -314,9 +323,21 @@ try {
         item.style.setProperty('--gd', Math.min(n++, 9) * 60 + 'ms');
         requestAnimationFrame(() => requestAnimationFrame(() => item.classList.add('shown')));
       } else {
-        item.classList.add('is-hidden');
-        item.classList.remove('shown');
         revealObserver.unobserve(item);
+        if (item.classList.contains('is-hidden')) return;
+        item.classList.remove('shown');
+        if (!animate || reduceMotion) {
+          item.classList.add('is-hidden');
+          return;
+        }
+        // small fade instead of an instant cut, so the tile doesn't just vanish
+        item.classList.add('leaving');
+        const t = setTimeout(() => {
+          item.classList.remove('leaving');
+          item.classList.add('is-hidden');
+          hideTimers.delete(item);
+        }, 250);
+        hideTimers.set(item, t);
       }
     });
   }

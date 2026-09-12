@@ -353,6 +353,7 @@ section{padding:0 5vw;}
   transition-delay:var(--gd,0ms);
 }
 .creation-item.shown{opacity:1;transform:none;clip-path:inset(0 0 0 0);}
+.creation-item.leaving{opacity:0;transition:opacity .25s ease;transition-delay:0s;}
 .creation-item.is-hidden{display:none;}
 @media (prefers-reduced-motion:reduce){
   .creation-item{transition:opacity .3s linear;transform:none;clip-path:none;}
