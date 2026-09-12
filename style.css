@@ -545,26 +545,27 @@ section{padding:0 5vw;}
 }
 
 /* footer */
-.site-footer{background:var(--paper);color:var(--ink);padding:34px 0;overflow:hidden;border-top:1px solid var(--line);}
-.footer-bottom{display:flex;justify-content:space-between;align-items:center;padding:0 5vw;font-size:.75rem;letter-spacing:.08em;color:var(--ink-soft);}
-.footer-bottom-left{display:flex;flex-wrap:wrap;gap:6px 18px;}
+.site-footer{background:var(--paper);color:var(--ink);padding:18px 0;overflow:hidden;border-top:1px solid var(--line);}
+.footer-bottom{display:flex;justify-content:space-between;align-items:center;padding:0 5vw;font-size:.68rem;letter-spacing:.06em;color:var(--ink-soft);}
+.footer-bottom-left{display:flex;flex-wrap:wrap;gap:4px 14px;}
 .footer-email{color:var(--ink-soft);position:relative;}
 .footer-email::after{content:'';position:absolute;left:0;bottom:-2px;width:100%;height:1px;background:var(--ink);transform:scaleX(0);transform-origin:right;transition:transform .3s var(--ease);}
 .footer-email:hover::after{transform:scaleX(1);transform-origin:left;}
 .footer-top-btn{
-  width:42px;height:42px;border-radius:50%;border:1px solid var(--line);
+  width:32px;height:32px;border-radius:50%;border:1px solid var(--line);
   display:flex;align-items:center;justify-content:center;color:var(--ink);flex:none;
   transition:border-color .3s var(--ease),background .3s var(--ease),transform .3s var(--ease);
 }
+.footer-top-btn svg{width:13px;height:13px;}
 .footer-top-btn:hover{border-color:var(--ink);background:var(--cream);}
 .footer-legal-btn{
-  font:inherit;font-size:.75rem;letter-spacing:.08em;color:var(--ink-soft);
+  font:inherit;font-size:.68rem;letter-spacing:.06em;color:var(--ink-soft);
   background:none;border:none;padding:0;cursor:pointer;position:relative;
 }
 .footer-legal-btn::after{content:'';position:absolute;left:0;bottom:-2px;width:100%;height:1px;background:var(--ink);transform:scaleX(0);transform-origin:right;transition:transform .3s var(--ease);}
 .footer-legal-btn:hover::after{transform:scaleX(1);transform-origin:left;}
 @media (max-width:600px){
-  .footer-bottom{flex-direction:column;align-items:flex-start;gap:16px;}
+  .footer-bottom{flex-direction:column;align-items:flex-start;gap:10px;}
 }
 
 /* legal modal — a light reading panel over a dark backdrop, kept separate
