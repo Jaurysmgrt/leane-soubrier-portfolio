@@ -272,47 +272,74 @@ try {
   });
 } catch (e) {}
 
-/* creation filters — tiles never move, the grid just relays out instantly;
-   only the tiles actually entering/leaving cross-fade in place */
+/* creation filters — same cascade reveal as sur jaurysmgrt.github.io/Portfolio :
+   chaque tuile qui apparaît fait un fondu + léger glissement + démasquage,
+   une par une (léger décalage). Celles qui disparaissent s'effacent net,
+   la grille ne déplace jamais rien (pas de Flip / position absolue). */
 try {
   const filterBtns = document.querySelectorAll('.filter-btn');
-  const creationItems = document.querySelectorAll('.creation-item');
-  const hasGsap = !!window.gsap;
+  const creationItems = Array.from(document.querySelectorAll('.creation-item'));
 
-  creationItems.forEach(item => {
-    if (hasGsap) gsap.set(item, { clearProps: 'position,width,height,top,left,maxWidth,maxHeight,minWidth,minHeight,transform,translate,rotate,scale,padding,opacity,display' });
-  });
+  let wave = 0, waveTimer = null;
+  function waveDelay() {
+    wave++;
+    clearTimeout(waveTimer);
+    waveTimer = setTimeout(() => { wave = 0; }, 240);
+    return Math.min(wave - 1, 9) * 60;
+  }
+
+  const revealObserver = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      const item = entry.target;
+      item.style.setProperty('--gd', waveDelay() + 'ms');
+      item.classList.add('shown');
+      revealObserver.unobserve(item);
+    });
+  }, { threshold: .1 });
+
+  function applyFilter(f, animate) {
+    let n = 0;
+    creationItems.forEach(item => {
+      const cats = (item.dataset.cat || '').split(' ');
+      const show = f === 'all' || cats.includes(f);
+
+      if (show) {
+        item.classList.remove('is-hidden');
+        item.classList.remove('shown');
+        if (!animate || reduceMotion) {
+          revealObserver.observe(item);
+          return;
+        }
+        item.style.setProperty('--gd', Math.min(n++, 9) * 60 + 'ms');
+        requestAnimationFrame(() => requestAnimationFrame(() => item.classList.add('shown')));
+      } else {
+        item.classList.add('is-hidden');
+        item.classList.remove('shown');
+        revealObserver.unobserve(item);
+      }
+    });
+  }
 
   filterBtns.forEach(btn => {
     btn.addEventListener('click', () => {
       filterBtns.forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
-      const f = btn.dataset.filter;
-
-      creationItems.forEach(item => {
-        const cats = (item.dataset.cat || '').split(' ');
-        const show = f === 'all' || cats.includes(f);
-        const wasHidden = item.classList.contains('is-hidden');
-
-        // Always kill any in-flight tween first: a fade started by a previous
-        // click may still be running (or mid-interruption) when this click
-        // lands, and its onComplete must never be allowed to fire later and
-        // stamp a stale is-hidden/opacity onto an item this click just decided
-        // the opposite for.
-        if (hasGsap) gsap.killTweensOf(item);
-
-        if (!reduceMotion && hasGsap && show && wasHidden) {
-          item.classList.remove('is-hidden');
-          gsap.fromTo(item, { opacity: 0 }, { opacity: 1, duration: .4, ease: 'power2.out', clearProps: 'opacity' });
-        } else if (!reduceMotion && hasGsap && !show && !wasHidden) {
-          gsap.to(item, { opacity: 0, duration: .25, ease: 'power2.in', onComplete: () => { item.classList.add('is-hidden'); item.style.opacity = ''; } });
-        } else {
-          item.classList.toggle('is-hidden', !show);
-          if (hasGsap) gsap.set(item, { clearProps: 'opacity' });
-        }
-      });
+      applyFilter(btn.dataset.filter, true);
     });
   });
+
+  // au premier chargement, chaque tuile se révèle au scroll plutôt que
+  // toutes en cascade derrière le préchargeur (invisible sinon)
+  applyFilter('all', false);
+
+  // filet de sécurité : une tuile ne doit jamais rester invisible si
+  // l'observateur ne se déclenche pas pour une raison ou une autre
+  setTimeout(() => {
+    creationItems.forEach(item => {
+      if (!item.classList.contains('is-hidden')) item.classList.add('shown');
+    });
+  }, 4000);
 } catch (e) {}
 
 /* project detail pages — clicking a tile expands its cover photo straight
