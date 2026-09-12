@@ -272,12 +272,16 @@ try {
   });
 } catch (e) {}
 
-/* creation filters — remaining items glide into their new spot (GSAP Flip)
-   instead of just fading, so the grid feels like it physically reflows */
+/* creation filters — tiles never move, the grid just relays out instantly;
+   only the tiles actually entering/leaving cross-fade in place */
 try {
   const filterBtns = document.querySelectorAll('.filter-btn');
   const creationItems = document.querySelectorAll('.creation-item');
-  const hasFlip = window.gsap && window.Flip;
+  const hasGsap = !!window.gsap;
+
+  creationItems.forEach(item => {
+    if (hasGsap) gsap.set(item, { clearProps: 'position,width,height,top,left,maxWidth,maxHeight,minWidth,minHeight,transform,translate,rotate,scale,padding,opacity,display' });
+  });
 
   filterBtns.forEach(btn => {
     btn.addEventListener('click', () => {
@@ -285,43 +289,28 @@ try {
       btn.classList.add('active');
       const f = btn.dataset.filter;
 
-      if (hasFlip && !reduceMotion) {
-        const grid = document.getElementById('creationsGrid');
-        // clicking a second filter before the previous transition finishes
-        // used to corrupt every tile permanently: Flip's in-flight tween
-        // holds explicit width/height/position values mid-interpolation,
-        // and starting a fresh Flip.getState() on top of that captured
-        // those half-collapsed values as the new "before" state — so every
-        // click after made things smaller until tiles were stuck at 0×0.
-        // Killing the previous tween and resetting to its resolved layout
-        // first means every click always starts from a clean, real state.
-        gsap.killTweensOf(creationItems);
-        gsap.set(creationItems, { clearProps: 'position,width,height,top,left,maxWidth,maxHeight,minWidth,minHeight,transform,translate,rotate,scale,padding,opacity' });
-        const state = Flip.getState(creationItems);
-        // Flip's absolute:true pulls every tile out of flow for the
-        // duration of the animation, so the grid itself has nothing left
-        // to size against and collapses to 0 height until it's over —
-        // pin it to its current height for the animation so the page
-        // below doesn't jump up and snap back around the moving tiles.
-        grid.style.minHeight = grid.getBoundingClientRect().height + 'px';
-        creationItems.forEach(item => {
-          const cats = (item.dataset.cat || '').split(' ');
-          const show = f === 'all' || cats.includes(f);
+      creationItems.forEach(item => {
+        const cats = (item.dataset.cat || '').split(' ');
+        const show = f === 'all' || cats.includes(f);
+        const wasHidden = item.classList.contains('is-hidden');
+
+        // Always kill any in-flight tween first: a fade started by a previous
+        // click may still be running (or mid-interruption) when this click
+        // lands, and its onComplete must never be allowed to fire later and
+        // stamp a stale is-hidden/opacity onto an item this click just decided
+        // the opposite for.
+        if (hasGsap) gsap.killTweensOf(item);
+
+        if (!reduceMotion && hasGsap && show && wasHidden) {
+          item.classList.remove('is-hidden');
+          gsap.fromTo(item, { opacity: 0 }, { opacity: 1, duration: .4, ease: 'power2.out', clearProps: 'opacity' });
+        } else if (!reduceMotion && hasGsap && !show && !wasHidden) {
+          gsap.to(item, { opacity: 0, duration: .25, ease: 'power2.in', onComplete: () => { item.classList.add('is-hidden'); item.style.opacity = ''; } });
+        } else {
           item.classList.toggle('is-hidden', !show);
-        });
-        Flip.from(state, {
-          duration: .6, ease: 'power3.out', stagger: .035, absolute: true,
-          onEnter: els => gsap.fromTo(els, { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: .5, ease: 'power2.out' }),
-          onLeave: els => gsap.to(els, { opacity: 0, y: 16, duration: .3, ease: 'power2.in' }),
-          onComplete: () => { grid.style.minHeight = ''; }
-        });
-      } else {
-        creationItems.forEach(item => {
-          const cats = (item.dataset.cat || '').split(' ');
-          const show = f === 'all' || cats.includes(f);
-          item.classList.toggle('is-hidden', !show);
-        });
-      }
+          if (hasGsap) gsap.set(item, { clearProps: 'opacity' });
+        }
+      });
     });
   });
 } catch (e) {}
